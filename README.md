@@ -7,7 +7,7 @@
 
   - 分类展示（√）
 
-    > ![image-20210923000752671](img/display.png)
+    > ![display.png](img/display.png)
 
   - 所有的关键词作为一个页面展示
 
@@ -49,7 +49,8 @@
 >      > | like_count    | int      | /      | /        | /    | 点赞数       |
 >      > | read_count    | int      | /      | /        | /    | 阅读数       |
 >      > | source        | varchar  | 255    | /        | /    | 来源/作者    |
->
+>      >![database image](img/database.png)
+>      >![database image](img/database.design.png)
 > 4. 开始爬取
 >
 >    1. 今日头条
