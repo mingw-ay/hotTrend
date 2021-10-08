@@ -1,0 +1,29 @@
+a {
+    text-decoration: none;
+    color: #001;
+}
+
+a:hover {
+    background-color: white;
+    color: skyblue;
+}
+
+
+a:focus {
+    background-color: white;
+    color: teal;
+}
+
+.sidebar {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.selected {
+    color: brown;
+}
+
+/* .container {
+    margin-left: 40px;
+    padding-left: 10px;
+} */
