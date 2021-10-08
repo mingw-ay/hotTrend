@@ -49,8 +49,8 @@
 >      > | like_count    | int      | /      | /        | /    | 点赞数       |
 >      > | read_count    | int      | /      | /        | /    | 阅读数       |
 >      > | source        | varchar  | 255    | /        | /    | 来源/作者    |
->      >![database image](img/database.png)
->      >![database image](img/database.design.png)
+>     - ![database image](img/database.png)
+>     - ![database image](img/database.design.png)
 > 4. 开始爬取
 >
 >    1. 今日头条
