@@ -6,20 +6,35 @@ from model.News import News
 def add_news(NewsList):
     try:
         # the sql statement for insert
-        sql = ("INSERT INTO news(title,tag,abstract,article_url,"
-               "behot_time,publish_time,comment_count,"
+        sql = ("INSERT INTO news(news_id,behot_time,publish_time,title,"
+               "tag,abstract,article_url,comment_count,"
                "like_count,read_count,source,keyword_str"
                ")"
-               "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+               "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
         for news in NewsList:
             cursor.execute(
-                sql, (news.title, news.tag, news.abstract, news.article_url,
-                      news.behot_time, news.publish_time, news.comment_count,
-                      news.like_count, news.read_count, news.source,
-                      news.keywordStr))
+                sql, (news.news_id, news.behot_time, news.publish_time,  news.title, news.tag, news.abstract,
+                      news.article_url, news.comment_count, news.like_count, news.read_count,
+                      news.source, news.keywordStr
+                      ))
             db.commit()
-            id = cursor.lastrowid
-            print(f'just added the news {id}')
+            print(f'just added the news {news.news_id}')
+    except Exception as e:
+        print(e)
+
+
+# 插入评论的方法
+def add_comments(commentList):
+    try:
+        # the sql statement for insert
+        sql = ("INSERT INTO comment(news_id,comment_str,comment_url,sentiment)"
+               "VALUES(%s,%s,%s,%s)")
+        for comment in commentList:
+            cursor.execute(
+                sql, (comment.news_id, comment.comment_str, comment.comment_url, comment.sentiment
+                      ))
+            db.commit()
+            print(f'just added the comment {comment.news_id}')
     except Exception as e:
         print(e)
 
@@ -38,19 +53,19 @@ def get_categories():
         print(e)
 
 
-# get the news with a specific categoryid
+# 获得某一类的所有新闻
 def get_news_byCaid(categoryId):
     try:
-        # the sql statement for insert
+        # sql语句
         sql = "SELECT * FROM news WHERE tag = %s"
         cursor.execute(sql, (categoryId, ))
         nodes = cursor.fetchall()
-        # initial the list
+        # 初始化列表
         newsList = []
         for i in range(len(nodes)):
-            news = News(nodes[i][2], nodes[i][3], nodes[i][4], nodes[i][5],
-                        nodes[i][6], nodes[i][7], nodes[i][9], nodes[i][10],
-                        nodes[i][11], nodes[i][12], nodes[i][8])
+            news = News(nodes[i][0], nodes[i][3], nodes[i][4], nodes[i][5],
+                        nodes[i][6], nodes[i][1], nodes[i][2], nodes[i][8],
+                        nodes[i][9], nodes[i][10], nodes[i][11], nodes[i][7])
             newsList.append(news)
         print(len(newsList))
         return newsList
@@ -61,3 +76,22 @@ def get_news_byCaid(categoryId):
 # refresh auto_increament
 def refresh_auto():
     cursor.execute("ALTER TABLE news AUTO_INCREMENT = 1")
+
+
+# 获得所有新闻
+def get_news():
+    try:
+        # sql语句
+        sql = "SELECT * FROM news"
+        cursor.execute(sql)
+        nodes = cursor.fetchall()
+        # 初始化列表
+        newsList = []
+        for i in range(len(nodes)):
+            news = News(nodes[i][0], nodes[i][3], nodes[i][4], nodes[i][5],
+                        nodes[i][6], nodes[i][1], nodes[i][2], nodes[i][8],
+                        nodes[i][9], nodes[i][10], nodes[i][11], nodes[i][7])
+            newsList.append(news)
+        return newsList
+    except Exception as e:
+        print(e)

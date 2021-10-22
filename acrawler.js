@@ -4,7 +4,7 @@ window = global;
 
 var location = {
     protocol: "https:",
-    href: "https://www.toutiao.com/?channel=hot",
+    href: "https://www.toutiao.com",
 };
 window.location = location;
 var document = {
@@ -13,7 +13,7 @@ var document = {
 window.document = document;
 
 var navigator = {
-    userAgent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36",
+    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36",
 };
 window.navigator = navigator;
 
@@ -678,9 +678,6 @@ const getUrl = (feed_url) => {
     let url = ooo.url + "&_signature=" + _signature
     return url;
 }
-
-console.log(getUrl("https://www.toutiao.com/api/pc/list/feed?channel_id=3189398996&max_behot_time=1632063422&category=pc_profile_channel"))
-
 
 
 
