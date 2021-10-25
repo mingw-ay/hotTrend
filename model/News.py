@@ -23,8 +23,7 @@ class News:
         self.keywordsToList()
 
     def keywordsToList(self):
-        self.keywordList = self.keywordStr.split(',')
-        self.keywordList.remove('')
+        self.keywordList = self.keywordStr.split('  ')
 
     def greeting(self):
         print(

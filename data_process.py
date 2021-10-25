@@ -33,7 +33,6 @@ def cut2words(newsList):
         newsList[i] = remove_stopword(newsList[i])
         # 调用转为字符串方法
         newsList[i] = join(newsList[i])
-        print(i)
     return newsList
 
 

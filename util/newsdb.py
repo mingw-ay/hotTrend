@@ -58,16 +58,15 @@ def get_news_byCaid(categoryId):
     try:
         # sql语句
         sql = "SELECT * FROM news WHERE tag = %s"
-        cursor.execute(sql, (categoryId, ))
+        cursor.execute(sql, (categoryId,))
         nodes = cursor.fetchall()
         # 初始化列表
         newsList = []
-        for i in range(len(nodes)):
+        for i in range(len(nodes)-1):
             news = News(nodes[i][0], nodes[i][3], nodes[i][4], nodes[i][5],
                         nodes[i][6], nodes[i][1], nodes[i][2], nodes[i][8],
                         nodes[i][9], nodes[i][10], nodes[i][11], nodes[i][7])
             newsList.append(news)
-        print(len(newsList))
         return newsList
     except Exception as e:
         print(e)
@@ -78,11 +77,11 @@ def refresh_auto():
     cursor.execute("ALTER TABLE news AUTO_INCREMENT = 1")
 
 
-# 获得所有新闻
+# 获得所有未进行分类的新闻
 def get_news():
     try:
         # sql语句
-        sql = "SELECT * FROM news"
+        sql = "SELECT * FROM news WHERE tag is null or TRIM(tag) = '' "
         cursor.execute(sql)
         nodes = cursor.fetchall()
         # 初始化列表
@@ -93,5 +92,20 @@ def get_news():
                         nodes[i][9], nodes[i][10], nodes[i][11], nodes[i][7])
             newsList.append(news)
         return newsList
+    except Exception as e:
+        print(e)
+
+
+# 提取关键词以及分类结束后更新列表
+def update_news(newsList):
+    try:
+        # the sql statement for insert
+        sql = ("UPDATE news "
+               "SET tag = %s, keyword_str = %s "
+               "WHERE news_id = %s")
+        for news in newsList:
+            cursor.execute(
+                sql, (news.tag, news.keywordStr, news.news_id))
+            db.commit()
     except Exception as e:
         print(e)

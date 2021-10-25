@@ -3,42 +3,35 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible"
-          content="IE=edge">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
-          crossorigin="anonymous">
-    <link rel="stylesheet"
-          type="text/css"
-          href="{{ url_for('static',filename='main.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='main.css') }}">
     <!-- FontAwesome Icons -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
-          integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+        integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Post_Scrawler</title>
 </head>
 
 <body>
     <main class="container-fluid">
         <div class="row g-3">
-            <div class="col-md-2 m-3 p-4 sidebar d-none d-md-inline-block">
+            <div class="col-md-2 m-3 p-4 sidebar d-none d-md-inline-block position-relative">
+                <div class="list position-fixed">
                 <h3>新闻分类</h3>
                 <p class='text-muted'>浏览所有爬取的新闻分类
                 <ul class="list-group">
                     {% for category in categories %}
-                    <li class=" list-group-item list-group-item-light"
-                        style="width: 13rem;">
+                    <li class=" list-group-item list-group-item-light" style="width: 13rem;">
                         <a href="{{url_for('category',categoryId=category)}}">{{category}}</a>
                     </li>
                     {% endfor %}
                 </ul>
                 </p>
+                </div>
             </div>
             <!-- '正文'的所有内容放在这里 -->
             <div class="col-md-8 col-lg-9 ms-auto p-4 mt-4 main-content">
@@ -49,8 +42,8 @@
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
-            crossorigin="anonymous"></script>
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+        crossorigin="anonymous"></script>
     <script src="{{ url_for('static',filename='main.js') }}"></script>
 </body>
 

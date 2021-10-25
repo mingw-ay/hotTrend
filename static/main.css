@@ -1,26 +1,25 @@
 a {
-    text-decoration: none;
-    color: #001;
+  text-decoration: none;
+  color: #001;
 }
 
 a:hover {
-    background-color: white;
-    color: skyblue;
+  background-color: white;
+  color: skyblue;
 }
 
-
 a:focus {
-    background-color: white;
-    color: teal;
+  background-color: white;
+  color: teal;
 }
 
 .sidebar {
-    margin-left: 0;
-    padding-left: 0;
+  margin-left: 0;
+  padding-left: 0;
 }
 
 .selected {
-    color: brown;
+  color: brown;
 }
 
 /* .container {
