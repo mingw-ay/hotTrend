@@ -1,10 +1,10 @@
 __metaclass__ = type
 
 
-# this is a class for every single entity
+# 封装每个新闻实体
 class News:
 
-    # Constructor there it is
+    # 构造方法
     def __init__(self, news_id, title, tag, abstract, article_url, behot_time,
                  publish_time, comment_count, like_count, read_count, source,
                  keywordStr):

@@ -2,10 +2,10 @@ from util.database import db, cursor
 from model.News import News
 
 
-# insert a newsList
+# 插入新闻列表
 def add_news(NewsList):
     try:
-        # the sql statement for insert
+        # 插入sql语句
         sql = ("INSERT INTO news(news_id,behot_time,publish_time,title,"
                "tag,abstract,article_url,comment_count,"
                "like_count,read_count,source,keyword_str"

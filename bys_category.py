@@ -77,7 +77,7 @@ def cut2keywords(textList):
 newsList = get_news()
 textList = []
 for news in newsList:
-    textList.append(news.title+news.abstract+news.keywordStr)
+    textList.append(news.title+news.abstract+news.keywordStr+news.source)
 
 
 # 调用提取关键词方法

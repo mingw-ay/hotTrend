@@ -82,7 +82,7 @@ def scrape_channel(channel_id, max_behot_time):
 
             # 创建news对象
             newsId = f'{newsNum}-{news_id}'
-            news = News(newsId, feed['title'], feed['tag'], feed['Abstract'],
+            news = News(newsId, feed['title'], None, feed['Abstract'],
                         feed['display_url'], convertToTime(feed['behot_time']),
                         convertToTime(feed['publish_time']),
                         feed['comment_count'], feed['like_count'],

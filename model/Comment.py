@@ -6,3 +6,5 @@ class Comment:
         self.comment_str = comment_str
         self.comment_url = comment_url
         self.sentiment = None
+        self.positive = None
+        self.confidence = None
