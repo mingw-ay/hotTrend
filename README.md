@@ -2,7 +2,10 @@
 
 #### 一、研究目标
 
+ 本次实验进行新闻热点趋势分析需要大量的原始数据，包括不同时段的新闻，及其热度度量标准的数据来源——评论阅读数，用户评论内容(用于)分析用户情感倾向，而本次数据来源主要为国内用户数量较多的新闻平台，包括网易新闻，今日头条等主流媒体
+
 #### 二、研究内容
+对得到的新闻进行清洗，然后进行新闻分类以及关键词提取，将提取的关键词作为主题，并且将用户的评论进行情感倾向分析，包括正向可能性以及可信度，同时通过一定的数学计算得到各主题的当前的热度值
 
 #### 三、方案设计
 
@@ -10,7 +13,18 @@
  - 今日头条的九个主要板块
   
         热点, 财经, 科技, 娱乐, 体育, 时尚,科技, 游戏, 军事, 国际
-    
+ - 在代码中定义爬取对象：
+    ```python
+    # 需要爬取的评到及id
+    array_channel_id = [
+        '3189398996', '3189399007', '3189398999',  '3189398972', '3189398957',
+        '3189398984', '3189398981', '3189398995', '3189398960', '3189398968'
+    ]
+    array_channel_name = [
+        'hot', 'finance', 'tech', 'entertainment', 'sports', 'fashion',
+        'digital', 'game', 'military', 'world'
+    ]
+    ```
 #### 2. 编码工具及语言
 
  - python语言
@@ -50,9 +64,12 @@
 #### 4. 网站分析
 - 今日头条网页信息并非静态数据，而是AJAX请求的
 
-  AJAX请求是网站通过js脚本发起的请求连接，目的就是为了在不刷新网页的情况下就能实时的更新网页内容，从而在感觉上你是觉得他和网页源码拼接在一起。F12开发者模式从众多的链接中进行筛选，选择AJAX的类型——XHR，然后发现了动态更新的api，利用request包将其中的json数据进行分析，清洗得到需要的字段`以标题为例`
+  AJAX请求是网站通过js脚本发起的请求连接，目的就是为了在不刷新网页的情况下就能实时的更新网页内容，从而在感觉上你是觉得他和网页源码拼接在一起。F12开发者模式从众多的链接中进行筛选，选择AJAX的类型——XHR，然后发现了动态更新的api，利用request包将其中的json数据进行分析，清洗得到需要的字段
+
+  `以标题为例`带参请求api:
   ![request包得到需要的数据](img/request_news.png)
-  得到标题
+  
+  得到标题：
   ![request result](img/request_result.png)
 - 请求参数分析
 
@@ -77,7 +94,7 @@
 ![](img/get_url.png)
 采用execjs包在使用python执行js代码，输入初始url，得到带上_signature参数的请用api
 ![](img/call_function.png)
-#### 2.爬取新闻实体
+#### 2. 爬取新闻实体
 每次爬取api会返回十个左右新闻，进行清洗后，将每个新闻封装为一个News对象，然后将带十个对象的列表传到数据库方法，存入数据库中
 ```python
 # 封装每个新闻实体
@@ -126,7 +143,7 @@ def add_news(NewsList):
     except Exception as e:
         print(e)
 ```
-#### 3.爬取评论实体
+#### 3. 爬取评论实体
 每次得到一个新闻对象，都判断其有无评论，若是有，则调用爬取评论方法，将新闻的id，评论数，新闻类型（文本或是视频），新闻的groupid传入爬取方法中
 评论同样是采用动态调用api的方法，api包括以下参数
 
@@ -137,7 +154,7 @@ def add_news(NewsList):
 | offset   | 评论的起始位置                         | No   |
 | count    | 需要返回的评论数，不够则返回最大数     | No   |
 
-评论实体：
+- 评论实体：
 ```python
 class Comment:
 
@@ -150,7 +167,7 @@ class Comment:
         self.positive = None
         self.confidence = None
 ```
-爬取方法如下：
+- 爬取方法如下：
 ```python
 # 传入,news_id,news_url,boolean值（代表是不是视频）以及视频评论个数
 def scrape_comment(news_id, url, is_video, commentCount):
@@ -177,11 +194,29 @@ def scrape_comment(news_id, url, is_video, commentCount):
     return comment
 
 ```
+- 之后将评论列表插入数据库
+```python
+# 插入评论的方法
+def add_comments(commentList):
+    try:
+        # 插入列表sql语句
+        sql = ("INSERT INTO comment(news_id,comment_str,comment_url,sentiment)"
+               "VALUES(%s,%s,%s,%s)")
+        for comment in commentList:
+            cursor.execute(
+                sql, (comment.news_id, comment.comment_str, comment.comment_url, comment.sentiment
+                      ))
+            db.commit()
+            print(f'just added the comment {comment.news_id}')
+    except Exception as e:
+        print(e)
+
+```
 #### 五、总结
 
+----
 
-
-#### 						设计方案——新闻分类以及关键词提取
+### 						设计方案——新闻分类以及关键词提取
 
 三、方案设计
 

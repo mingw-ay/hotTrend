@@ -26,7 +26,7 @@ def add_news(NewsList):
 # 插入评论的方法
 def add_comments(commentList):
     try:
-        # the sql statement for insert
+        # 插入列表sql语句
         sql = ("INSERT INTO comment(news_id,comment_str,comment_url,sentiment)"
                "VALUES(%s,%s,%s,%s)")
         for comment in commentList:
