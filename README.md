@@ -317,7 +317,7 @@ for w in words:
         words_pure.append(w.word)
 print(words_pure)
 ```
-![](images/jieba.png)
+![](img/jieba.png)
 
 #### 3.6停用词处理
 停用词，指的是在我们语句中大量出现，但却对语义分析没有帮助的词。对于这样的词汇，我们通常可以将其删除，这样的好处在于：可以降低存储空间消耗、可以减少计算时间消耗。 对于哪些词属于停用词，已经有统计好的停用词列表，我们直接使用就好。
@@ -336,7 +336,7 @@ s = ['等到', '放晴', '的', '那天', '也许', '我会', '比较', '好', '
 
 print(remove_stopword(s))
 ```
-![stopword](images/stopword.png)
+![stopword](img/stopword.png)
 
 ### 4 文本向量化
 对文本数据进行建模，需要解决以下两个问题：
@@ -357,7 +357,7 @@ print(remove_stopword(s))
 
 如果转换为词袋模型， 则结果为：
 
-![词袋模型](images/pocket.png)
+![词袋模型](img/pocket.png)
 
 ```python
 from sklearn.feature_extraction.text import CountVectorizer
@@ -385,7 +385,7 @@ print(count.get_feature_names_out())
 print(count.vocabulary_)
 # 输出特征单词与编号的映射关系
 ```
-![运行结果](images/voc_pocket_example.png)
+![运行结果](img/voc_pocket_example.png)
 这里需要留意的是，默认情况下，CountVectorizer 只会对字符长度不小于2 的单词进行处理，如果单词长度小于2 （ 单词仅有一个字符） ，则会忽略该单词，例如，上例中的单词“ a ” ，并没有作为特征进行向量化。经过训练后，countvectorizer 就可以对未知文档（ 训练集外的文档） 进行向量化。当然，`向量化的特征仅为训练集中出现的单词特征，如果未知文档中的单词不在训练集中，则在词袋模型中无法体现。`
 
 #### 5.2 TF-IDF
@@ -395,7 +395,7 @@ print(count.vocabulary_)
 * IDF (lnverse Document-Frequency)逆文档频率。
 
 其计算方式如下：
-![计算公式](images/news_tfi.jpg)
+![计算公式](img/news_tfi.jpg)
 使用TfidfTransformer进行TF-IDF转化，此外，scikit-learn 同时提供了一个类TfidfVectorizer, 其可以直接将文档转换为TF-IDF值，也就是说，该类相当于集成了CountVectorizer 与TfidfTransformer两个类的功能，十分便利。
 ```python
 from sklearn.feature_extraction.text import CountVectorizer
@@ -414,7 +414,7 @@ tfdif = TfidfTransformer()
 t = tfdif.fit_transform(bag)
 print(t.toarray())
 ```
-![tf-idf转换](images/voca_pocket.png)
+![tf-idf转换](img/voca_pocket.png)
 ```
 以上方法为使用词袋模型向量化（CountVectorizer()）
 和TF-IDF(TfidfTransformer())共同调整单词在文档中的权重
@@ -433,7 +433,7 @@ tfdif = TfidfVectorizer()
 t = tfdif.fit_transform(docs)
 print(t.toarray())
 ```
-![](images/tfidfVectorizer().png)
+![](img/tfidfVectorizer().png)
 
 ### 6 建立模型
 6.1 训练集与测试集最终成型
@@ -463,7 +463,7 @@ def cut2words(newsList):
         newsList[i] = join(newsList[i])
         print(i)
 ```
-![join方法](images/join.png)
+![join方法](img/join.png)
 
 然后从写入的文件中读出所需要的所有数据集
 ```python
@@ -524,7 +524,7 @@ y_val = list(map(map2digits, y_val))
 
 print('训练集样本数：', len(X_train), '测试机样本数：', len(X_test),'验证集样本数：', len(X_val))
 ```
-![datasets](images/datasets.png)
+![datasets](img/datasets.png)
 
 #### 6.2 特征选择
 #### 6.2.1 特征维度-方差分析
@@ -556,7 +556,7 @@ X_val_tran = vec.transform(X_val)
 print('X_val vecterized')
 print(X_train_tran.shape, X_test_tran.shape, X_val_tran.shape)
 ```
-![vertorized imges](images/vertorized.png)
+![vertorized imges](img/vertorized.png)
 ```python
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_selection import f_classif
@@ -578,7 +578,7 @@ X_test_tran = selector.transform(X_test_tran)
 X_val_tran = selector.transform(X_val_tran)
 print(X_train_tran.shape, X_test_tran.shape, X_val_tran.shape)
 ```
-![方差特征选择](images/kbestshit.png)
+![方差特征选择](img/kbestshit.png)
 
 #### 6.3 分类模型评估标准
 混淆矩阵：可以来评估模型分类的正确性。该矩阵是一个方阵， 矩阵的数值来表示分类器预测的结果， 包括真正例(True Positive ） 假正例(FaIsePositive) 真负例(True Negative ）假负例(False Negative)
@@ -624,7 +624,7 @@ print(gs.best_params_)
 y_hat = gs.best_estimator_.predict(X_test_tran)
 print(classification_report(y_test, y_hat))
 ```
-![运行结果还不错](images/shitresult.png)
+![运行结果还不错](img/shitresult.png)
 > * 准确率（Accuracy）: 0.91
 > * 精确率(Precision)：0.92
 > * 召回率(Recall)：0.91
