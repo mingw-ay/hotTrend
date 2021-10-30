@@ -217,7 +217,7 @@ def add_comments(commentList):
 ----
 
 ## 设计方案——新闻分类以及关键词提取
-### 1. 概述
+### 一. 概述
 #### 1.1 案例背景
 `新闻分类是文本分类中常见的应用场量。在传统分类模式下，往往是通过人工对新闻内容进行核对，从而将新闻划分到合适的类别中。这种方式会消耗大量的人力资源，并且效率不高。`
 #### 1.2 任务和实现
@@ -250,7 +250,7 @@ THUCNews是根据新浪新闻RSS订阅频道2005~2011年间的历史数据筛选
 * cnews.val.txt: 验证集(5000条)
 * cnews.test.txt: 测试集(10000条)
 
-### 2. 加载数据
+### 二. 加载数据
 
 #### 2.1 准备工作
 安装jieba，wordcloud库
@@ -283,7 +283,7 @@ getLabelList(train_texts, train_label)
 getLabelList(test_texts, test_label)
 getLabelList(val_texts, val_label)
 ```
-### 3 数据预处理
+### 三 数据预处理
 
 #### 3.1 文本处理
 
@@ -338,7 +338,7 @@ print(remove_stopword(s))
 ```
 ![stopword](img/stopword.png)
 
-### 4 文本向量化
+### 四 文本向量化
 对文本数据进行建模，需要解决以下两个问题：
 
 * 模型进行的是数学运算， 因此需要数值类型的数据， 而文本不是数值类型数据。
@@ -349,7 +349,7 @@ print(remove_stopword(s))
 * 对文本分词， 拆分成更容处理的单词。
 * 将单词转换为数值类型， 即使用合适的数值来表示每个单词。
 
-#### 5.1 词袋模型
+#### 4.1 词袋模型
 词袋模型，直观上理解，就是一个装满单词的袋子。实际上，词袋模型是一种能够将文本向量化的方式。在词袋模型中，每个文档为一个样本，每个不重复的单词为一个特征，单词在文档中出现的次数作为特征值。例如，给定如下的文档集：
     
     Where there is a will, there is a way
@@ -388,7 +388,7 @@ print(count.vocabulary_)
 ![运行结果](img/voc_pocket_example.png)
 这里需要留意的是，默认情况下，CountVectorizer 只会对字符长度不小于2 的单词进行处理，如果单词长度小于2 （ 单词仅有一个字符） ，则会忽略该单词，例如，上例中的单词“ a ” ，并没有作为特征进行向量化。经过训练后，countvectorizer 就可以对未知文档（ 训练集外的文档） 进行向量化。当然，`向量化的特征仅为训练集中出现的单词特征，如果未知文档中的单词不在训练集中，则在词袋模型中无法体现。`
 
-#### 5.2 TF-IDF
+#### 4.2 TF-IDF
 通过CountVectorizer 类，我们能够将文档向量化处理。在向量化过程中，我们使每个文档中单词的频数作为对应待征的取值。这是合理的，因为，单词出现的次数越多，我们就认为该单词理应比出现次数少的单词更加重要。然而，这是相对的，有些单词，我们不能仅以当前文档中的频数来进行衡量，还要考虑其在语料库中，在其他文档中出现的次数。因为有些单词，确实是非常常见的，其在语料库所有的文档中，可能都会频繁出现，对于这样的单词，我们就应该降低其重要性。例如，在新闻联播中，”中国“、”发展“等单词，在语料库中出现的频率非常高，即使这些词在某篇文档中频繁出现，也不能说明这些词对当前文档是非常重要的，因为这些词并不含有特别有意义的信息。 `TF-IDF `可以用来调整单词在文档中的权重，其由两部分组成：
 
 * TF (Term-Frequency) 词频， 指一个单词在文档中出现的次数。
@@ -435,8 +435,8 @@ print(t.toarray())
 ```
 ![](img/tfidfVectorizer().png)
 
-### 6 建立模型
-6.1 训练集与测试集最终成型
+### 五 建立模型
+5.1 训练集与测试集最终成型
 
     我们需要将每条新闻的词汇进行整理。目前，我们文本内容已经完成了
     分词处理，但词汇是以列表类型呈现的，为了方便后续的向量化操作（ 
@@ -526,8 +526,8 @@ print('训练集样本数：', len(X_train), '测试机样本数：', len(X_test
 ```
 ![datasets](img/datasets.png)
 
-#### 6.2 特征选择
-#### 6.2.1 特征维度-方差分析
+#### 5.2 特征选择
+#### 5.2.1 特征维度-方差分析
     到目前为止，数据集X还是文本类型，我们需要对其
     进行向量化操作。这里，我们使TfidfVectorizer
     类，在训练集上进行训练，然后分别对训练集与测试
@@ -580,7 +580,7 @@ print(X_train_tran.shape, X_test_tran.shape, X_val_tran.shape)
 ```
 ![方差特征选择](img/kbestshit.png)
 
-#### 6.3 分类模型评估标准
+#### 5.3 分类模型评估标准
 混淆矩阵：可以来评估模型分类的正确性。该矩阵是一个方阵， 矩阵的数值来表示分类器预测的结果， 包括真正例(True Positive ） 假正例(FaIsePositive) 真负例(True Negative ）假负例(False Negative)
 
 > |      | 负例         | 正例         |
@@ -599,7 +599,7 @@ print(X_train_tran.shape, X_test_tran.shape, X_val_tran.shape)
     >  * `target-names` ： 目标类别名称
     >  * `return`: 每个类别预测的精确率、召回率、F1-score
 
-#### 6.4 朴素贝叶斯
+#### 5.4 朴素贝叶斯
 
 ```python
 # 朴素贝叶斯
@@ -630,4 +630,96 @@ print(classification_report(y_test, y_hat))
 > * 召回率(Recall)：0.91
 > * 综合指标(F1-score)：0.91
 > * 各项指标来看，在本次案例中，朴素贝叶斯拟合效果较好。
+
+#### 六、关键词提取
+jieba，即“结巴”中文分词，一个优秀的开源的分词工具，一直致力于做最好的 Python 中文分词组件。我们直接使用它对新闻内容进行5个关键词的提取，使用该分词方案，对比上节的各个分词方案，在模型相同的情况下，会有2%~5%的准确率的提升。关键词抽取可基于以下两种算法，后续实验实践证明基于 TF-IDF 算法的关键词的抽取，在该数据集和我们后续所选择的模型中会得到更好的效果。
+```python
+# 得到文本的关键词并返回关键词列表
+import jieba.analyse
+jieba.analyse.extract_tags(sentence, topK=20, withWeight=False, allowPOS=())
+```
+
+    1.sentence 为待提取的文本
+    2.topK 为返回几个 TF/IDF 权重最大的关键词，默认值为 20
+    3.withWeight 为是否一并返回关键词权重值，默认值为 False
+    4.allowPOS 仅包括指定词性的词，默认值为空，即不筛选
+    5.jieba.analyse.TFIDF(idf_path=None) 新建 TFIDF 实例，
+    6.idf_path 为 IDF 频率文件
+
+代码实例(关键词提取)
+```python
+# 得到文本的关键词并返回关键词列表
+def cut2keywords(textList):
+    # 得到方法
+    extract = jieba.analyse.extract_tags
+    keywordsList = []
+    for text in textList:
+        keywords = extract(text, topK=5, allowPOS=(['n', 'nr']))
+        keywordsList.append(' '.join(keywords))
+    return keywordsList
+
+
+# 从数据库取出未分类的新闻，进行清洗
+newsList = get_news()
+textList = []
+for news in newsList:
+    textList.append(news.title+news.abstract+news.keywordStr+news.source)
+
+
+# 调用提取关键词方法
+keywordsList = cut2keywords(textList)
+print('提取关键词结束！')
+```
+### 七 评论平均情感分析
+针对通用场景下带有主观描述的中文文本，自动判断该文本的情感极性类别并给出相应的置信度，情感极性分为积极、消极、中性
+![shit](img/baidu.png)
+#### 7.1 百度api调用
+```python
+import json
+import requests
+
+# client_id 为官网获取的AK， client_secret 为官网获取的SK
+# 获取access_token
+host = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=4VdHqzXuclTj2G7M9d9GG7mC&client_secret=xLrOO6HH2h9t94CWzfrtT75aiz2TC47S'
+response = requests.get(host).json()
+mytoken = response['access_token']
+
+
+# 给出评论字符以及token
+# 返回正向概率，置信度以及情感极性（积极、消极、中性）
+def txt_mask(mystr, mytoken):
+    data = json.dumps({
+        "text": mystr
+    })
+
+    header = {
+        'Content-Type': 'application/json'
+    }
+
+    url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/sentiment_classify?charset=UTF-8&access_token=' + mytoken
+    results = requests.post(url=url, headers=header, data=data).json()
+    sentiment = results['items'][0]
+    return sentiment
+```
+进行可视化
+```python
+# 根据感情倾向数值进行可视化呈现
+def process_bar(percent):
+    repeat_times = int(percent * 10)
+    bar = '感情正向->' + '微笑' * repeat_times + \
+        '伤心' * (10 - repeat_times) + '<-感情负向'
+    print(bar)
+
+
+myStr = '味道不错，确实不算太辣，适合不能吃辣的人。就在长江边上，抬头就能看到长江的风景。鸭肠、黄鳝都比较新鲜。'
+process_bar(txt_mask(myStr, mytoken)['positive_prob'])
+```
+![sentiment](img/sentiment.png))
+#### 7.2 返回参数
+| 参数名        | 形式       | 评论                         |
+| ------------- | ---------- | ---------------------------- |
+| positive_prob | 小数(0到1) | 表示正向情感倾向             |
+| confidence    | 小数(0到1) | 表示置信度，是否确定         |
+| negative_prob | 小数(0到1) | 表示负面情感倾向             |
+| sentiment     | 0，1，2    | 从小到大表示负向，中性，正向 |
 

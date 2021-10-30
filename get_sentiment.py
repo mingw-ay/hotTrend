@@ -19,8 +19,9 @@ def txt_mask(mystr, mytoken):
 
     url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/sentiment_classify?charset=UTF-8&access_token=' + mytoken
     results = requests.post(url=url, headers=header, data=data).json()
-    positive_prob = results['items'][0]['positive_prob']
-    return positive_prob
+    results = results['items'][0]
+    print(results)
+    return results
 
 
 # 根据感情倾向数值进行可视化呈现
@@ -31,4 +32,5 @@ def process_bar(percent):
     print(bar)
 
 
-process_bar(txt_mask('吃惊', mytoken))
+myStr = '味道不错，确实不算太辣，适合不能吃辣的人。就在长江边上，抬头就能看到长江的风景。鸭肠、黄鳝都比较新鲜。'
+process_bar(txt_mask(myStr, mytoken)['positive_prob'])
