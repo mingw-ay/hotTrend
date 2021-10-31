@@ -5,10 +5,11 @@ __metaclass__ = type
 class News:
 
     # 构造方法
-    def __init__(self, news_id, title, tag, abstract, article_url, behot_time,
+    def __init__(self, news_id, created, title, tag, abstract, article_url, behot_time,
                  publish_time, comment_count, like_count, read_count, source,
                  keywordStr):
         self.news_id = news_id
+        self.created = created
         self.title = title
         self.tag = tag
         self.abstract = abstract

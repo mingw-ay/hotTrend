@@ -33,20 +33,24 @@ def process_bar(percent):
     print(bar)
 
 
-# 从数据库中取出未曾进行情感分析的评论对象列表
-commentList = get_comments_without()
+def update_sented():
+    # 从数据库中取出未曾进行情感分析的评论对象列表
+    commentList = get_comments_without()
+    print(len(commentList))
+
+    # 循环commentList对象列表
+    # 然后对每个对象进行情感分析，并且将结果放入对象
+    for i, comment in enumerate(commentList):
+        result = txt_mask(comment.comment_str, mytoken)
+        commentList[i].sentiment = result['sentiment']
+        commentList[i].positive = result['positive_prob']
+        commentList[i].confidence = result['confidence']
+        print(f'分析了第{i}个评论')
+        time.sleep(0.2)
+
+    # 更新数据库comment表
+    update_comments(commentList)
 
 
-# 循环commentList对象列表
-# 然后对每个对象进行情感分析，并且将结果放入对象
-for i, comment in enumerate(commentList):
-    result = txt_mask(comment.comment_str, mytoken)
-    commentList[i].sentiment = result['sentiment']
-    commentList[i].positive = result['positive_prob']
-    commentList[i].confidence = result['confidence']
-    print(f'分析了第{i}个评论')
-    time.sleep(0.3)
-
-
-# 更新数据库comment表
-update_comments(commentList)
+for i in range(10):
+    update_sented()

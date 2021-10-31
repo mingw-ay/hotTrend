@@ -1,22 +1,34 @@
-from database import db, cursor
+from util.database import db, cursor
 from model.News import News
 from model.Comment import Comment
 # from Comment import Comment
 # from News import News
 
 
+# 获得当前新闻数量
+def get_newsNum():
+    try:
+        # sql语句
+        sql = ('select max(news_id) from news')
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        return result[0][0]
+    except Exception as e:
+        print(e)
+
+
 # 插入新闻列表
 def add_news(NewsList):
     try:
         # 插入sql语句
-        sql = ("INSERT INTO news(news_id,behot_time,publish_time,title,"
+        sql = ("INSERT INTO news(news_id,created,behot_time,publish_time,title,"
                "tag,abstract,article_url,comment_count,"
                "like_count,read_count,source,keyword_str"
                ")"
-               "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+               "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
         for news in NewsList:
             cursor.execute(
-                sql, (news.news_id, news.behot_time, news.publish_time,  news.title, news.tag, news.abstract,
+                sql, (news.news_id, news.created, news.behot_time, news.publish_time,  news.title, news.tag, news.abstract,
                       news.article_url, news.comment_count, news.like_count, news.read_count,
                       news.source, news.keywordStr
                       ))
@@ -66,9 +78,9 @@ def get_news_byCaid(categoryId):
         # 初始化列表
         newsList = []
         for i in range(len(nodes)-1):
-            news = News(nodes[i][0], nodes[i][3], nodes[i][4], nodes[i][5],
-                        nodes[i][6], nodes[i][1], nodes[i][2], nodes[i][8],
-                        nodes[i][9], nodes[i][10], nodes[i][11], nodes[i][7])
+            news = News(nodes[i][0], nodes[i][1], nodes[i][4], nodes[i][5], nodes[i][6],
+                        nodes[i][7], nodes[i][2], nodes[i][3], nodes[i][9],
+                        nodes[i][10], nodes[i][11], nodes[i][12], nodes[i][8])
             newsList.append(news)
         return newsList
     except Exception as e:
@@ -85,9 +97,9 @@ def get_news():
         # 初始化列表
         newsList = []
         for i in range(len(nodes)):
-            news = News(nodes[i][0], nodes[i][3], nodes[i][4], nodes[i][5],
-                        nodes[i][6], nodes[i][1], nodes[i][2], nodes[i][8],
-                        nodes[i][9], nodes[i][10], nodes[i][11], nodes[i][7])
+            news = News(nodes[i][0], nodes[i][1], nodes[i][4], nodes[i][5], nodes[i][6],
+                        nodes[i][7], nodes[i][2], nodes[i][3], nodes[i][9],
+                        nodes[i][10], nodes[i][11], nodes[i][12], nodes[i][8])
             newsList.append(news)
         return newsList
     except Exception as e:
@@ -113,13 +125,13 @@ def update_news(newsList):
 def get_comments_without():
     try:
         # sql语句
-        sql = "SELECT * FROM comment WHERE sentiment is null or TRIM(sentiment) = '' "
+        sql = "SELECT * FROM comment WHERE sentiment is null or TRIM(sentiment) = '' LIMIT 20;"
         cursor.execute(sql)
         nodes = cursor.fetchall()
         # 初始化列表
         commentList = []
         for i in range(len(nodes)):
-            comment = Comment(nodes[i][0], nodes[i][1], nodes[i][2])
+            comment = Comment(nodes[i][1], nodes[i][2], nodes[i][3])
             commentList.append(comment)
         return commentList
     except Exception as e:

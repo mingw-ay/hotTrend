@@ -1,6 +1,6 @@
 from model.News import News
 from scrape_content import scrape_comment
-from util.newsdb import add_news, add_comments
+from util.newsdb import add_news, add_comments, get_newsNum
 from scrape_content import scrape_comment
 import requests
 import time
@@ -24,24 +24,24 @@ headers = {
 
 # 记录本次爬取新闻的序号以及爬取时间戳（10位）
 initial_behot_time = int(time.time())
-newsNum = 0
-
-time.sleep(1)
+newsNum = get_newsNum()+1
 
 
-# we need a function for convert timestamp
+# 将时间戳转换为正常时间格式的方法
 def convertToTime(timestamp):
-    # make it localtime
+    # 转为localtime
     time_local = time.localtime(timestamp)
-    # then shift it to the new time style
+    # 使用strftime转为需要的格式
     return time.strftime("%Y-%m-%d %H:%M:%S", time_local)
 
 
 # 每个板块的爬虫方法：
 def scrape_channel(channel_id, max_behot_time):
+    # 全局newsNum
     global newsNum
-    # 得到初始的news-id
-    news_id = str(max_behot_time)
+    # 得到created
+    created = max_behot_time
+    max_behot_time = 0
     # 循环10次爬取该频道
     for i in range(0, 10):
         # 爬取新闻列表的api
@@ -54,7 +54,8 @@ def scrape_channel(channel_id, max_behot_time):
         # 打印最终要爬取的url
         print(feed_url)
         # 开始爬取
-        feeds = requests.get(feed_url, headers=headers).json()['data']
+        feeds = requests.get(feed_url, headers=headers,
+                             timeout=30).json()['data']
         # 改变最大时间
         try:
             max_behot_time = feeds[len(feeds) - 1]['behot_time']
@@ -80,9 +81,9 @@ def scrape_channel(channel_id, max_behot_time):
                     keywordStr = keywordStr + fwords['name'].replace(
                         '不想看:', '') + ','
 
-            # 创建news对象
-            newsId = f'{newsNum}-{news_id}'
-            news = News(newsId, feed['title'], None, feed['Abstract'],
+            # 得到初始的news_id
+            news_id = newsNum
+            news = News(news_id, created, feed['title'], None, feed['Abstract'],
                         feed['display_url'], convertToTime(feed['behot_time']),
                         convertToTime(feed['publish_time']),
                         feed['comment_count'], feed['like_count'],
@@ -99,7 +100,7 @@ def scrape_channel(channel_id, max_behot_time):
                 if '视频' in keywordStr:
                     is_video = True
                 # 调用爬取评论方法
-                comment = scrape_comment(newsId, feed['display_url'],
+                comment = scrape_comment(news_id, feed['display_url'],
                                          is_video, feed['comment_count'])
                 # 将得到的comment对象接入列表
                 commentList.append(comment)

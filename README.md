@@ -32,22 +32,22 @@
 
 #### 3. 数据库设计
  - 新闻(News)表：`除了主键news_id其余皆可为空`
-   | Name          | Type     | Length | Not Null | Key | Comment                    |
-   | ------------- | -------- | ------ | -------- | --- | -------------------------- |
-   | news_id       | int      | /      | √        | √   | 新闻编号(自动递增)         |
-   | created       | int      | /      | /        | /   | 10位时间戳(本次爬取时间戳) |
-   | title         | varchar  | 255    | /        | /   | 新闻标题                   |
-   | tag           | varchar  | 255    | /        | /   | 新闻分类                   |
-   | abstract      | varchar  | 1000   | /        | /   | 新闻概要/新闻主体          |
-   | article_url   | varchar  | 1000   | /        | /   | 新闻链接                   |
-   | behot_time    | datetime | /      | /        | /   | 开始热门时间               |
-   | publish_time  | datetime | /      | /        | /   | 发布时间                   |
-   | keyword_str   | varchar  | 255    | /        | /   | 新闻关键词(5个)            |
-   | comment_count | int      | /      | /        | /   | 评论数                     |
-   | like_count    | int      | /      | /        | /   | 点赞数                     |
-   | read_count    | int      | /      | /        | /   | 阅读数                     |
-   | source        | varchar  | 255    | /        | /   | 来源/作者                  |
-   | created       | datetime | /      | /        | /   | 爬取时间                   |
+   | Name          | Type     | Length | Not Null | Key | Comment                                |
+   | ------------- | -------- | ------ | -------- | --- | -------------------------------------- |
+   | news_id       | int      | /      | √        | √   | 新闻编号,从数据库获得新闻数得到news_id |
+   | created       | int      | /      | /        | /   | 10位时间戳(本次爬取时间戳)             |
+   | title         | varchar  | 255    | /        | /   | 新闻标题                               |
+   | tag           | varchar  | 255    | /        | /   | 新闻分类                               |
+   | abstract      | varchar  | 1000   | /        | /   | 新闻概要/新闻主体                      |
+   | article_url   | varchar  | 1000   | /        | /   | 新闻链接                               |
+   | behot_time    | datetime | /      | /        | /   | 开始热门时间                           |
+   | publish_time  | datetime | /      | /        | /   | 发布时间                               |
+   | keyword_str   | varchar  | 255    | /        | /   | 新闻关键词(5个)                        |
+   | comment_count | int      | /      | /        | /   | 评论数                                 |
+   | like_count    | int      | /      | /        | /   | 点赞数                                 |
+   | read_count    | int      | /      | /        | /   | 阅读数                                 |
+   | source        | varchar  | 255    | /        | /   | 来源/作者                              |
+   | created       | datetime | /      | /        | /   | 爬取时间                               |
   - ![database image](img/news_database.png)
   ![database image](img/news_database_design.png)
 - 评论表(Comment)`将新闻表的news_id作为外键`
