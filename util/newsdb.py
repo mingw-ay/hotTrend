@@ -1,5 +1,8 @@
-from util.database import db, cursor
+from database import db, cursor
 from model.News import News
+from model.Comment import Comment
+# from Comment import Comment
+# from News import News
 
 
 # 插入新闻列表
@@ -39,7 +42,7 @@ def add_comments(commentList):
         print(e)
 
 
-# get all the categories
+# 获得所有分类
 def get_categories():
     try:
         # the sql statement for insert
@@ -72,11 +75,6 @@ def get_news_byCaid(categoryId):
         print(e)
 
 
-# refresh auto_increament
-def refresh_auto():
-    cursor.execute("ALTER TABLE news AUTO_INCREMENT = 1")
-
-
 # 获得所有未进行分类的新闻
 def get_news():
     try:
@@ -106,6 +104,61 @@ def update_news(newsList):
         for news in newsList:
             cursor.execute(
                 sql, (news.tag, news.keywordStr, news.news_id))
+            db.commit()
+    except Exception as e:
+        print(e)
+
+
+# 获得所有未经过情感分析的评论
+def get_comments_without():
+    try:
+        # sql语句
+        sql = "SELECT * FROM comment WHERE sentiment is null or TRIM(sentiment) = '' "
+        cursor.execute(sql)
+        nodes = cursor.fetchall()
+        # 初始化列表
+        commentList = []
+        for i in range(len(nodes)):
+            comment = Comment(nodes[i][0], nodes[i][1], nodes[i][2])
+            commentList.append(comment)
+        return commentList
+    except Exception as e:
+        print(e)
+
+
+# 将情感分析过后的comment进行更新
+def update_comments(commentList):
+    try:
+        # the sql statement for insert
+        sql = ("UPDATE comment "
+               "SET sentiment = %s, positive = %s, confidence = %s "
+               "WHERE news_id = %s")
+        for comment in commentList:
+            cursor.execute(
+                sql, (comment.sentiment, comment.positive, comment.confidence, comment.news_id))
+            db.commit()
+    except Exception as e:
+        print(e)
+
+
+# 将情感分析过后的comment进行更新
+def database_edits():
+    try:
+        # the sql statement for insert
+        sql = ("SELECT * FROM comment")
+        cursor.execute(sql)
+        nodes = cursor.fetchall()
+        # 初始化列表
+        newsList = []
+        for i in range(len(nodes)):
+            news = News(nodes[i][1], None, None, None, None,
+                        None, None, None, None, None, None, None, i+1)
+            newsList.append(news)
+
+        for news in newsList:
+            sql0 = ("UPDATE comment "
+                    "SET comment_id = %s WHERE news_id = %s")
+            cursor.execute(sql0, (news.id, news.news_id))
             db.commit()
     except Exception as e:
         print(e)

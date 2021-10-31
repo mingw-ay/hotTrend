@@ -108,6 +108,7 @@ def scrape_channel(channel_id, max_behot_time):
         add_news(newsList)
         add_comments(commentList)
 
+        # 休息一会儿，防止被怀疑
         time.sleep(1)
 
 

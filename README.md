@@ -34,7 +34,8 @@
  - 新闻(News)表：`除了主键news_id其余皆可为空`
    | Name          | Type     | Length | Not Null | Key | Comment                    |
    | ------------- | -------- | ------ | -------- | --- | -------------------------- |
-   | news_id       | varchar  | 255    | √        | √   | 新闻编号(爬取时间戳加序号) |
+   | news_id       | int      | /      | √        | √   | 新闻编号(自动递增)         |
+   | created       | int      | /      | /        | /   | 10位时间戳(本次爬取时间戳) |
    | title         | varchar  | 255    | /        | /   | 新闻标题                   |
    | tag           | varchar  | 255    | /        | /   | 新闻分类                   |
    | abstract      | varchar  | 1000   | /        | /   | 新闻概要/新闻主体          |
@@ -52,14 +53,15 @@
 - 评论表(Comment)`将新闻表的news_id作为外键`
   | Name        | Type    | Length | Not Null | Key | Comment            |
   | ----------- | ------- | ------ | -------- | --- | ------------------ |
-  | news_id     | varchar | 255    | √        | √   | 对应新闻编号       |
+  | comment_id  | int     | /      | √        | √   | 评论编号(自动递增) |
+  | news_id     | int     | /      | √        | /   | 对应新闻编号       |
   | comment_str | varchar | 620    | /        | /   | 30条评论 tab键隔开 |
   | comment_url | varchar | 255    | /        | /   | 评论api            |
   | sentiment   | binary  | 1      | /        | /   | 评论平均情感倾向   |
   | positive    | binary  | 1      | /        | /   | 正向比例           |
   | confidence  | binary  | 1      | /        | /   | 自信度             |
-- ![database image](img/news_database.png)
- ![database image](img/news_database_design.png)
+- ![database image](img/comment_database.png)
+ ![database image](img/comment_database_design.png)
 
 #### 4. 网站分析
 - 今日头条网页信息并非静态数据，而是AJAX请求的
