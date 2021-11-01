@@ -633,7 +633,7 @@ print(classification_report(y_test, y_hat))
 > * 综合指标(F1-score)：0.91
 > * 各项指标来看，在本次案例中，朴素贝叶斯拟合效果较好。
 
-#### 六、关键词提取
+### 六、关键词提取
 jieba，即“结巴”中文分词，一个优秀的开源的分词工具，一直致力于做最好的 Python 中文分词组件。我们直接使用它对新闻内容进行5个关键词的提取，使用该分词方案，对比上节的各个分词方案，在模型相同的情况下，会有2%~5%的准确率的提升。关键词抽取可基于以下两种算法，后续实验实践证明基于 TF-IDF 算法的关键词的抽取，在该数据集和我们后续所选择的模型中会得到更好的效果。
 ```python
 # 得到文本的关键词并返回关键词列表
@@ -724,4 +724,52 @@ process_bar(txt_mask(myStr, mytoken)['positive_prob'])
 | confidence    | 小数(0到1) | 表示置信度，是否确定         |
 | negative_prob | 小数(0到1) | 表示负面情感倾向             |
 | sentiment     | 0，1，2    | 从小到大表示负向，中性，正向 |
+#### 7.3 批量进行评论情感分析
+从数据库中取出未曾进行情感分析的评论对象列表(每次取20个)，数据库方法如下：
+```python
+# 获得所有未经过情感分析的评论
+def get_comments_without():
+    try:
+        # sql语句
+        sql = "SELECT * FROM comment WHERE sentiment is null or TRIM(sentiment) = '' LIMIT 20;"
+        cursor.execute(sql)
+        nodes = cursor.fetchall()
+        # 初始化列表
+        commentList = []
+        for i in range(len(nodes)):
+            comment = Comment(nodes[i][1], nodes[i][2], nodes[i][3])
+            commentList.append(comment)
+        return commentList
+    except Exception as e:
+        print(e)
+```
+然后调用情感分析，将每个评论对象的情感分析结果，包括情感倾向，置信度放入对象中
+```python
+def update_sented():
+    # 从数据库中取出未曾进行情感分析的评论对象列表
+    commentList = get_comments_without()
+    print(len(commentList))
+
+    # 循环commentList对象列表
+    # 然后对每个对象进行情感分析，并且将结果放入对象
+    for i, comment in enumerate(commentList):
+        result = txt_mask(comment.comment_str, mytoken)
+        commentList[i].sentiment = result['sentiment']
+        commentList[i].positive = result['positive_prob']
+        commentList[i].confidence = result['confidence']
+        print(f'分析了第{i}个评论')
+        time.sleep(0.2)
+
+    # 更新数据库comment表
+    update_comments(commentList)
+
+# 进行10次，10*20 = 200
+# 对两百个新闻进行情感分析
+for i in range(10):
+    update_sented()s
+```
+
+## 可视化实现
+## 事件属性定义和热度分析
+
 

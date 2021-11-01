@@ -52,5 +52,7 @@ def update_sented():
     update_comments(commentList)
 
 
+# 进行10次，10*20 = 200
+# 对两百个新闻进行情感分析
 for i in range(10):
     update_sented()

@@ -1,0 +1,58 @@
+{% extends "layout.html" %} {% block content %}
+
+<!-- 搜索框，以及开始爬虫按钮 -->
+<div class="filter pb-5">
+  <div class="row g-3 ms-auto">
+    <div class="col-9">
+      <input
+        type="text"
+        class="form-control filter-input"
+        placeholder="输入爬虫对象网址"
+      />
+    </div>
+    <div class="col-3">
+      <a href="/category/体育">
+        <button type="button" class="btn Addbtn">添加站点</button>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- 网站图标,展示爬虫对象 -->
+<div class="websites pb-5">
+  <div class="row g-3">
+    <div class="col-2"></div>
+    <div class="col-2">
+      <button type="button" class="btn">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-shejiaotubiao-46"></use>
+        </svg>
+      </button>
+    </div>
+    <div class="col-2">
+      <button type="button" class="btn">
+        <svg class="icon" aria-hidden="true">
+          <use
+            xlink:href="#icon-toutiaoyangshi
+    "
+          ></use>
+        </svg>
+      </button>
+    </div>
+    <div class="col-2">
+      <button type="button" class="btn">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-wangyi"></use>
+        </svg>
+      </button>
+    </div>
+    <div class="col-2">
+      <button type="button" class="btn">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-icon2"></use>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock content %}

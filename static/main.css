@@ -1,3 +1,8 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
 a {
   text-decoration: none;
   color: #001;
@@ -13,6 +18,52 @@ a:focus {
   color: teal;
 }
 
+.p-container {
+  margin: 0;
+  padding: 0;
+}
+
+a.my-brand {
+  color: #fff;
+}
+
+a.my-brand:hover {
+  background-color: #191919;
+  color: #5bc3eb;
+}
+
+.filter {
+  padding-top: 12%;
+  padding-left: 15%;
+  padding-right: 15%;
+  background-color: #74a4bc;
+}
+
+.websites {
+  padding-top: 6%;
+  padding-left: 15%;
+  padding-right: 15%;
+  background-color: #dddddd;
+}
+
+.filter-input {
+  height: 40px;
+}
+
+.Addbtn {
+  height: 40px;
+  background-color: #5bc3eb;
+}
+.my-dark {
+  background-color: #191919;
+  z-index: 1000;
+  width: 100%;
+}
+
+.my-container {
+  padding-top: 3%;
+}
+
 .sidebar {
   margin-left: 0;
   padding-left: 0;
@@ -22,7 +73,10 @@ a:focus {
   color: brown;
 }
 
-/* .container {
-    margin-left: 40px;
-    padding-left: 10px;
-} */
+.icon {
+  width: 60px;
+  height: 60px;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}

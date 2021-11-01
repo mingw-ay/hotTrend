@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template
 from util.newsdb import get_categories, get_news_byCaid
 
 app = Flask(__name__)
@@ -7,12 +7,7 @@ app = Flask(__name__)
 # 首页分类展示所有的爬取的新闻的类别
 @app.route("/")
 def home():
-    categories = get_categories()
-    newsList = get_news_byCaid(categories[0])
-    categories.sort()
-    return render_template('category.html',
-                           categories=categories,
-                           allnews=newsList)
+    return render_template('home.html')
 
 
 @app.route("/category/<categoryId>")
