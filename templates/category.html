@@ -1,48 +1,50 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="row my-container container-fluid">
-    <div class="col-md-2 my-3 p-4 sidebar d-none d-md-inline-block position-relative">
-        <div class="list position-fixed">
-        <h3>新闻分类</h3>
-        <p class='text-muted'>浏览所有爬取的新闻分类
-        <ul class="list-group">
-            {% for category in categories %}
-            <li class=" list-group-item list-group-item-light" style="width: 13rem;">
-                <a href="{{url_for('category',categoryId=category)}}">{{category}}</a>
-            </li>
+<div class="pewter-blue">
+    <div class="row my-container container-fluid">
+        <div class="col-md-2 my-3 p-4 sidebar d-none d-md-inline-block position-relative">
+            <div class="list position-fixed">
+            <h3>新闻分类</h3>
+            <p class='text-muted'>浏览所有爬取的新闻分类
+            <ul class="list-group">
+                {% for category in categories %}
+                <li class=" list-group-item list-group-item-light back-wrapper" style="width: 13rem;">
+                    <a href="{{url_for('category',categoryId=category)}}">{{category}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+            </p>
+            </div>
+        </div>
+        <div class="col-md-8 col-lg-9 ms-auto p-4 mt-4 main-content">
+            {% for news in allnews %}
+            <article class="card content-section back-wrapper">
+                <div class="card-body">
+                    <div class="article-metadata">
+                        <a href="#">{{ news.source }}</a>
+                        <small class="m-1 text-muted">{{ news.publish_time }}</small>
+                        {% for keyword in news.keywordList %}
+                        <a href="#"
+                           class="mx-1 keyword">#{{ keyword }}</a>
+                        {% endfor %}
+                    </div>
+                    <h2 class="mt-1"><a class="article-title"
+                           href="{{ news.article_url }}"
+                           target="view_window">{{ news.title }}</a></h2>
+                    <p class="article-content">{{ news.abstract }}</p>
+                    <div class="args hstack">
+                        <!-- 阅读数 -->
+                        <div class="view_count"><i class="m-1 fas fa-eye"></i>{{ news.read_count }}</div>
+                        <!-- 点赞数 -->
+                        <div class="ms-auto sudos"><i class="m-1 fas fa-heart"></i>{{ news.like_count }}</div>
+                        <!-- 评论数 -->
+                        <div class="comments_count mx-4"><i class="fas fa-comment"></i>{{ news.comment_count }}</div>
+                    </div>
+                </div>
+            </article>
+            <br>
             {% endfor %}
-        </ul>
-        </p>
         </div>
     </div>
-    <div class="col-md-8 col-lg-9 ms-auto p-4 mt-4 main-content">
-        {% for news in allnews %}
-        <article class="card content-section">
-            <div class="card-body">
-                <div class="article-metadata">
-                    <a href="#">{{ news.source }}</a>
-                    <small class="m-1 text-muted">{{ news.publish_time }}</small>
-                    {% for keyword in news.keywordList %}
-                    <a href="#"
-                       class="mx-1 keyword">#{{ keyword }}</a>
-                    {% endfor %}
-                </div>
-                <h2 class="mt-1"><a class="article-title"
-                       href="{{ news.article_url }}"
-                       target="view_window">{{ news.title }}</a></h2>
-                <p class="article-content">{{ news.abstract }}</p>
-                <div class="args hstack">
-                    <!-- 阅读数 -->
-                    <div class="view_count"><i class="m-1 fas fa-eye"></i>{{ news.read_count }}</div>
-                    <!-- 点赞数 -->
-                    <div class="ms-auto sudos"><i class="m-1 fas fa-heart"></i>{{ news.like_count }}</div>
-                    <!-- 评论数 -->
-                    <div class="comments_count mx-4"><i class="fas fa-comment"></i>{{ news.comment_count }}</div>
-                </div>
-            </div>
-        </article>
-        <br>
-        {% endfor %}
-    </div>
-</div>
+</div
 {% endblock content %}

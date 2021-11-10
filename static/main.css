@@ -9,13 +9,11 @@ a {
 }
 
 a:hover {
-  background-color: white;
-  color: skyblue;
+  color: #3f7cac;
 }
 
 a:focus {
-  background-color: white;
-  color: teal;
+  color: #3f7cac;
 }
 
 .p-container {
@@ -28,6 +26,11 @@ a.my-brand {
 }
 
 a.my-brand:hover {
+  background-color: #191919;
+  color: #5bc3eb;
+}
+
+a.my-brand:focus {
   background-color: #191919;
   color: #5bc3eb;
 }
@@ -79,4 +82,20 @@ a.my-brand:hover {
   vertical-align: -0.15em;
   fill: currentColor;
   overflow: hidden;
+}
+
+.btn-blue {
+  color: #5bc3eb;
+}
+
+.btn-blue:hover {
+  color: #5bc3eb;
+}
+
+.back-wrapper {
+  background-color: #dddddd;
+}
+
+.pewter-blue {
+  background-color: #74a4bc;
 }

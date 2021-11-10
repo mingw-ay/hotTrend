@@ -1,9 +1,9 @@
 {% extends "layout.html" %} {% block content %}
-
 <!-- 搜索框，以及开始爬虫按钮 -->
 <div class="filter pb-5">
   <div class="row g-3 ms-auto">
-    <div class="col-9">
+    <div class="col-1"></div>
+    <div class="col-8">
       <input
         type="text"
         class="form-control filter-input"
@@ -21,7 +21,7 @@
 <!-- 网站图标,展示爬虫对象 -->
 <div class="websites pb-5">
   <div class="row g-3">
-    <div class="col-2"></div>
+    <div class="col-1"></div>
     <div class="col-2">
       <button type="button" class="btn">
         <svg class="icon" aria-hidden="true">
@@ -50,6 +50,13 @@
       <button type="button" class="btn">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-icon2"></use>
+        </svg>
+      </button>
+    </div>
+    <div class="col-2">
+      <button type="button" class="btn btn-blue">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-icon_bilibili-circle"></use>
         </svg>
       </button>
     </div>

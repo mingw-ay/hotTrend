@@ -770,6 +770,9 @@ for i in range(10):
 ```
 
 ## 可视化实现
+### 一、先贴两张图嘚
+![home page](img/home.png)
+![category page](img/category_page.png)
 ## 事件属性定义和热度分析
 
 
