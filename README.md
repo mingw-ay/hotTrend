@@ -31,25 +31,32 @@
  - 使用Pycharm或者Visual Studio Code
 
 #### 3. 数据库设计
- - 新闻(News)表：`除了主键news_id其余皆可为空`
-   | Name          | Type     | Length | Not Null | Key | Comment                                |
-   | ------------- | -------- | ------ | -------- | --- | -------------------------------------- |
-   | news_id       | int      | /      | √        | √   | 新闻编号,从数据库获得新闻数得到news_id |
-   | created       | int      | /      | /        | /   | 10位时间戳(本次爬取时间戳)             |
-   | title         | varchar  | 255    | /        | /   | 新闻标题                               |
-   | tag           | varchar  | 255    | /        | /   | 新闻分类                               |
-   | abstract      | varchar  | 1000   | /        | /   | 新闻概要/新闻主体                      |
-   | article_url   | varchar  | 1000   | /        | /   | 新闻链接                               |
-   | behot_time    | datetime | /      | /        | /   | 开始热门时间                           |
-   | publish_time  | datetime | /      | /        | /   | 发布时间                               |
-   | keyword_str   | varchar  | 255    | /        | /   | 新闻关键词(5个)                        |
-   | comment_count | int      | /      | /        | /   | 评论数                                 |
-   | like_count    | int      | /      | /        | /   | 点赞数                                 |
-   | read_count    | int      | /      | /        | /   | 阅读数                                 |
-   | source        | varchar  | 255    | /        | /   | 来源/作者                              |
-   | created       | datetime | /      | /        | /   | 爬取时间                               |
+ - 新闻(News)表：`除了主键news_id其余皆可为空，由于新闻不能重复爬取，故而article_url同样设置为主键`
+   | Name         | Type     | Length | Not Null | Key | Comment                                |
+   | ------------ | -------- | ------ | -------- | --- | -------------------------------------- |
+   | news_id      | int      | /      | √        | √   | 新闻编号,从数据库获得新闻数得到news_id |
+   | created      | int      | /      | /        | /   | 10位时间戳(本次爬取时间戳)             |
+   | title        | varchar  | 255    | /        | /   | 新闻标题                               |
+   | tag          | varchar  | 255    | /        | /   | 新闻分类                               |
+   | abstract     | varchar  | 1000   | /        | /   | 新闻概要/新闻主体                      |
+   | article_url  | varchar  | 1000   | /        | /   | 新闻链接                               |
+   | behot_time   | datetime | /      | /        | /   | 开始热门时间                           |
+   | publish_time | datetime | /      | /        | /   | 发布时间                               |
+   | keyword_str  | varchar  | 255    | /        | /   | 新闻关键词(5个)                        |
+   | source       | varchar  | 255    | /        | /   | 来源/作者                              |
   - ![database image](img/news_database.png)
   ![database image](img/news_database_design.png)
+ - 热值(newsvalue)表：`不同时间爬取得到同一个新闻的评论数，点赞数，阅读数等热度度量标准，newsvalue_id为主键`
+     | Name          | Type | Length | Not Null | Key | Comment                                  |
+     | ------------- | ---- | ------ | -------- | --- | ---------------------------------------- |
+     | hotvalue_id   | int  | /      | √        | √   | 热度编号，自增                           |
+     | news_id       | int  | /      | √        | /   | 新闻编号,从数据库获得新闻数得到news_id   |
+     | created       | int  | /      | /        | /   | 10位时间戳(本次爬取时间戳)               |
+     | comment_count | int  | /      | /        | /   | 评论数                                   |
+     | like_count    | int  | /      | /        | /   | 点赞数                                   |
+     | read_count    | int  | /      | /        | /   | 阅读数                                   |
+     | hotvalue      | int  | /      | /        | /   | 通过特定计算公式得到定量的热值，可以为空 |
+ - ![hotvalue table design](img/hotvalue_table.png)
 - 评论表(Comment)`将新闻表的news_id作为外键`
   | Name        | Type    | Length | Not Null | Key | Comment            |
   | ----------- | ------- | ------ | -------- | --- | ------------------ |
