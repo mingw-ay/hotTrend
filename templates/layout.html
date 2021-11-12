@@ -24,6 +24,8 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <!-- 另外包含的css文件 -->
+    {% block css %}{% endblock %}
     <title>Post_Scrawler</title>
   </head>
 
@@ -50,5 +52,6 @@
     ></script>
     <script src="{{ url_for('static',filename='main.js') }}"></script>
     <script src="{{ url_for('static',filename='iconfont.js') }}"></script>
+    {% block scripts %}{% endblock %}
   </body>
 </html>

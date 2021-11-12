@@ -1,7 +1,13 @@
-{% extends "layout.html" %} {% block content %}
+{% extends "layout.html" %} {% block css %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{ url_for('static',filename='home.css') }}"
+/>
+{% endblock %} {% block content %}
 <!-- 搜索框，以及开始爬虫按钮 -->
 <div class="filter pb-5">
-  <div class="row g-3 ms-auto">
+  <div class="row g-3 ms-auto pt-sm-5 pt-md-0 pb-4">
     <div class="col-1"></div>
     <div class="col-8">
       <input
@@ -21,16 +27,16 @@
 <!-- 网站图标,展示爬虫对象 -->
 <div class="websites pb-5">
   <div class="row g-3">
-    <div class="col-1"></div>
-    <div class="col-2">
-      <button type="button" class="btn">
+    <div class="col-md-1"></div>
+    <div class="col-md-2 col-sm-4">
+      <button type="button" class="btn website">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-shejiaotubiao-46"></use>
         </svg>
       </button>
     </div>
-    <div class="col-2">
-      <button type="button" class="btn">
+    <div class="col-md-2 col-sm-4">
+      <button type="button" class="btn website">
         <svg class="icon" aria-hidden="true">
           <use
             xlink:href="#icon-toutiaoyangshi
@@ -39,22 +45,22 @@
         </svg>
       </button>
     </div>
-    <div class="col-2">
-      <button type="button" class="btn">
+    <div class="col-md-2 col-sm-4">
+      <button type="button" class="btn website">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-wangyi"></use>
         </svg>
       </button>
     </div>
-    <div class="col-2">
-      <button type="button" class="btn">
+    <div class="col-md-2 col-sm-4">
+      <button type="button" class="btn website">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-icon2"></use>
         </svg>
       </button>
     </div>
-    <div class="col-2">
-      <button type="button" class="btn btn-blue">
+    <div class="col-md-2 col-sm-4">
+      <button type="button" class="btn website btn-blue">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-icon_bilibili-circle"></use>
         </svg>
@@ -62,4 +68,6 @@
     </div>
   </div>
 </div>
-{% endblock content %}
+{% endblock content %} {% block scripts %}
+<script src="{{ url_for('static',filename='home.js') }}"></script>
+{% endblock %}

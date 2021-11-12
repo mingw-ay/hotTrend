@@ -1,0 +1,25 @@
+.website:focus {
+  box-shadow: none;
+}
+
+.website {
+  padding: 15px 0px 8px 15px;
+}
+
+.web_selected {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  padding: 15px 0px 8px 15px;
+}
+
+.fa-check-circle {
+  color: #5bc3eb;
+  position: relative;
+  top: 9px;
+  right: 8px;
+  height: 7px;
+  width: 7px;
+}
+
+.web_selected:focus {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
