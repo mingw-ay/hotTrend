@@ -14,7 +14,6 @@ def home():
 def category(categoryId):
     categories = get_categories()
     newsList = get_news_byCaid(categoryId)
-    categories.sort()
     return render_template('category.html',
                            categories=categories,
                            allnews=newsList)
