@@ -3,9 +3,9 @@ import mysql.connector
 # a dic for config
 config = {
     'user': 'root',
-    'password': 'root',
-    'host': 'localhost',
-    'database': 'on_hot'
+    'password': 'fork1313',
+    'host': '121.43.37.118',
+    'database': 'news_scrawler'
 }
 
 db = mysql.connector.connect(**config)

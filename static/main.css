@@ -1,6 +1,12 @@
 * {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  overflow-x: hidden;
 }
 
 a {
@@ -14,11 +20,6 @@ a:hover {
 
 a:focus {
   color: #3f7cac;
-}
-
-.p-container {
-  margin: 0;
-  padding: 0;
 }
 
 a.my-brand {
