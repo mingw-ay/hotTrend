@@ -17,14 +17,17 @@ array_channel_name = [
 ]
 headers = {
     'cookie':
-    'ttcid=6c3e28f42423412caa4378942dcbe36f23; csrftoken=4efb247cc103db0866e0fb0efe1865a8; MONITOR_WEB_ID=6988780148074038791; tt_webid=7009957373263824398; __ac_nonce=0614d434f00ef9e7a2a05; __ac_signature=_02B4Z6wo00f01wbHT9gAAIDBTeMfqNJx.Y8G40tAAKEGByDXQvfpb9YjqUCLswNFT64CgdfQGSFDaeOvMCOWqb4PIVzTo-sRekpV9-iJE6QeoHqtKX4pfbcBUodJgxxSmF3.ANLWc2.diGeS7d; s_v_web_id=verify_ktxsn1qj_I54FCrES_wtX6_4kZE_AApw_lZAWN4jDZttV; tt_scid=-AYM1AjQQmFOwd99R.7aeNxLWE.zsj3Q5Nu05qrjWOBD0GSVdO0A3UquMcrSlf8lc79d',
+    'ttcid=00bc2fa788004311b7da7442686d524226; csrftoken=c59b6047f660e65a1f661a7bd19a498a; MONITOR_WEB_ID=7009637787465680415; MONITOR_DEVICE_ID=17fb5952-8c0d-45d0-8936-ace6b7a53bed; _S_WIN_WH=1280_648; _S_DPR=1.5; _S_IPAD=0; passport_csrf_token=01d3ce90f6f6ffe1550a2b5abb15034f; tt_webid=7009637787465680415; _tea_utm_cache_2018=undefined; __ac_nonce=061946709008b9a6bb858; __ac_signature=_02B4Z6wo00f01E4Y3hQAAIDAzhokVEwgwJROPNqAAHIZw4yL4X2UkC6rIBkQdbtHM2A6GTl.RuJD-Fo7re8.YqTLtDFaPR.AdF3kXH1-Xuh6Wdoa.tuTgOmsf5OSpgXL32OCOsF0YRooG7Go22; tt_scid=M--0InyDeCuxY2RCo6CMALHYaYqLCTnAeWuSZLq5qNIPd-5FgGflSm-NKrz4AkCibd16; s_v_web_id=verify_4a220507418516811edf80b57fb86b55',
     'user-agent':
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36'
 }
 
 # 记录本次爬取新闻的序号以及爬取时间戳（10位）
 initial_behot_time = int(time.time())
-newsNum = get_newsNum()+1
+try:
+    newsNum = get_newsNum()+1
+except Exception as e:
+    newsNum = 1
 
 
 # 将时间戳转换为正常时间格式的方法
@@ -81,9 +84,13 @@ def scrape_channel(channel_id, max_behot_time):
                     keywordStr = keywordStr + fwords['name'].replace(
                         '不想看:', '') + ','
 
+            # 排除所有视频
+            if 'video' in feed['tag'] or '视频' in keywordStr:
+                continue
+
             # 得到初始的news_id
             news_id = newsNum
-            news = News(news_id, created, feed['title'], None, feed['Abstract'],
+            news = News(news_id, created, feed['title'], '#'+feed['tag'], feed['Abstract'],
                         feed['display_url'], convertToTime(feed['behot_time']),
                         convertToTime(feed['publish_time']),
                         feed['comment_count'], feed['like_count'],

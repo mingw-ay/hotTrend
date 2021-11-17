@@ -100,7 +100,8 @@ def get_news_byCaid(categoryId):
 def get_news():
     try:
         # sql语句
-        sql = "SELECT * FROM news WHERE tag is null or TRIM(tag) = '' "
+        # sql = "SELECT * FROM news WHERE tag is null or TRIM(tag) = '' "
+        sql = "SELECT * FROM news"
         cursor.execute(sql)
         nodes = cursor.fetchall()
         # 初始化列表
