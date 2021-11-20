@@ -1,7 +1,7 @@
 from model.News import News
-from scrape_content import scrape_comment
+from scrape_comment import get_comment
 from util.newsdb import add_news, add_comments, get_newsNum
-from scrape_content import scrape_comment
+from scrape_comment import get_comment
 import requests
 import time
 import execjs
@@ -17,7 +17,7 @@ array_channel_name = [
 ]
 headers = {
     'cookie':
-    'ttcid=00bc2fa788004311b7da7442686d524226; csrftoken=c59b6047f660e65a1f661a7bd19a498a; MONITOR_WEB_ID=7009637787465680415; MONITOR_DEVICE_ID=17fb5952-8c0d-45d0-8936-ace6b7a53bed; _S_WIN_WH=1280_648; _S_DPR=1.5; _S_IPAD=0; passport_csrf_token=01d3ce90f6f6ffe1550a2b5abb15034f; tt_webid=7009637787465680415; _tea_utm_cache_2018=undefined; __ac_nonce=061946709008b9a6bb858; __ac_signature=_02B4Z6wo00f01E4Y3hQAAIDAzhokVEwgwJROPNqAAHIZw4yL4X2UkC6rIBkQdbtHM2A6GTl.RuJD-Fo7re8.YqTLtDFaPR.AdF3kXH1-Xuh6Wdoa.tuTgOmsf5OSpgXL32OCOsF0YRooG7Go22; tt_scid=M--0InyDeCuxY2RCo6CMALHYaYqLCTnAeWuSZLq5qNIPd-5FgGflSm-NKrz4AkCibd16; s_v_web_id=verify_4a220507418516811edf80b57fb86b55',
+    '__ac_nonce=06198fb5d0028f235645b; __ac_signature=_02B4Z6wo00f016fH6PAAAIDDJ8USseWiey-n5-xAAIhxd8; ttcid=1f91d8a58d7943f9bfdba13e533e34af36; csrftoken=0c80651dc788b91a0f1d33c8b4273ca2; MONITOR_WEB_ID=7032647174854051365; tt_scid=9kik67w.Tn17PlxIaK.XpcoKabB7sUBY.S8-c3UQMdD.Yai6NViXD8kdvac0u3ch3aa1; s_v_web_id=verify_ab0c212b68bbf3b2e75730bcf1015df3; MONITOR_DEVICE_ID=fd0f515d-6c88-4a28-a63b-ffe60b5fc94b; _tea_utm_cache_2018=undefined',
     'user-agent':
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36'
 }
@@ -85,7 +85,9 @@ def scrape_channel(channel_id, max_behot_time):
                         '不想看:', '') + ','
 
             # 排除所有视频
-            if 'video' in feed['tag'] or '视频' in keywordStr:
+            if 'video' in feed['tag'] or '视频' in keywordStr or '视频' in feed['source']:
+                continue
+            if 'media' in feed['tag']:
                 continue
 
             # 得到初始的news_id
@@ -107,8 +109,8 @@ def scrape_channel(channel_id, max_behot_time):
                 if '视频' in keywordStr:
                     is_video = True
                 # 调用爬取评论方法
-                comment = scrape_comment(news_id, feed['display_url'],
-                                         is_video, feed['comment_count'])
+                comment = get_comment(news_id, feed['display_url'],
+                                      is_video, feed['comment_count'])
                 # 将得到的comment对象接入列表
                 commentList.append(comment)
 

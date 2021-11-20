@@ -12,6 +12,7 @@ class News:
         self.created = created
         self.title = title
         self.tag = tag
+        self.article_body = None,
         self.abstract = abstract
         self.article_url = article_url
         self.behot_time = behot_time

@@ -10,7 +10,19 @@ from model.Comment import Comment
 def get_newsNum():
     try:
         # sql语句
-        sql = ('select max(news_id) from news')
+        sql = ('select max(news_id) from tt_news')
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        return result[0][0]
+    except Exception as e:
+        print(e)
+
+
+# 得到当前评论数量
+def get_commentNum():
+    try:
+        # sql语句
+        sql = ('select max(comment_id) from comment')
         cursor.execute(sql)
         result = cursor.fetchall()
         return result[0][0]
@@ -22,24 +34,17 @@ def get_newsNum():
 def add_news(NewsList):
     try:
         # 插入sql语句
-        sql0 = ("INSERT INTO news(news_id,created,behot_time,publish_time,title,"
-                "tag,abstract,article_url,source,keyword_str"
+        sql0 = ("INSERT INTO tt_news(news_id,created,behot_time,publish_time,title,"
+                "tag,abstract,article_url,source,keyword_str,cmt_count,like_count,read_count"
                 ")"
-                "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
-        sql1 = ("INSERT INTO hotvalue(news_id,created,comment_count,like_count,read_count"
-                ")"
-                "VALUES(%s,%s,%s,%s,%s)")
+                "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
         for news in NewsList:
             # 插入news表
             cursor.execute(
                 sql0, (news.news_id, news.created, news.behot_time, news.publish_time, news.title,
-                       news.tag, news.abstract, news.article_url, news.source, news.keywordStr
+                       news.tag, news.abstract, news.article_url, news.source, news.keywordStr,
+                       news.comment_count, news.like_count, news.read_count
                        ))
-            db.commit()
-            # 插入hotvalue表
-            cursor.execute(
-                sql1, (news.news_id, news.created,
-                       news.comment_count, news.like_count, news.read_count))
             db.commit()
             print(f'just added the news {news.news_id}')
     except Exception as e:
@@ -50,13 +55,19 @@ def add_news(NewsList):
 def add_comments(commentList):
     try:
         # 插入列表sql语句
-        sql = ("INSERT INTO comment(news_id,comment_str,comment_url,sentiment)"
-               "VALUES(%s,%s,%s,%s)")
+        sql = ("INSERT INTO comment(comment_id,article_url,comment_str,comment_url,sentiment)"
+               "VALUES(%s,%s,%s,%s,%s)")
+        # 得到当前新闻个数
+        commentNum = get_commentNum()
+        if(commentNum == None):
+            commentNum = 1
+        else:
+            commentNum += 1
         for comment in commentList:
             cursor.execute(
-                sql, (comment.news_id, comment.comment_str, comment.comment_url, comment.sentiment
-                      ))
+                sql, (commentNum, comment.article_url, comment.comment_str, comment.comment_url, comment.sentiment))
             db.commit()
+            commentNum += 1
             print(f'just added the comment {comment.news_id}')
     except Exception as e:
         print(e)
@@ -100,15 +111,17 @@ def get_news_byCaid(categoryId):
 def get_news():
     try:
         # sql语句
-        # sql = "SELECT * FROM news WHERE tag is null or TRIM(tag) = '' "
-        sql = "SELECT * FROM news"
+        # sql = "SELECT * FROM ttnews WHERE tag is null or TRIM(tag) = '' "
+        sql = "SELECT * FROM tt_news WHERE article_body is Null or TRIM(article_body)='' "
+        print(sql)
         cursor.execute(sql)
         nodes = cursor.fetchall()
         # 初始化列表
         newsList = []
         for i in range(len(nodes)):
-            news = News(nodes[i][0], nodes[i][1], nodes[i][4], nodes[i][5], nodes[i][6],
-                        nodes[i][7], nodes[i][2], nodes[i][3], None, None, None, nodes[i][9], nodes[i][8])
+            news = News(nodes[i][0], nodes[i][1], nodes[i][4], nodes[i][5], nodes[i][7],
+                        nodes[i][8], nodes[i][2], nodes[i][3], nodes[i][11], nodes[i][12],
+                        nodes[i][13], nodes[i][10], nodes[i][9])
             newsList.append(news)
         return newsList
     except Exception as e:
@@ -162,6 +175,21 @@ def update_comments(commentList):
         print(e)
 
 
+# 将爬取的新闻主题插入的方法
+def update_news_body(newsList):
+    try:
+        # the sql statement for insert
+        sql = ("UPDATE tt_news "
+               "SET article_body = %s"
+               "WHERE news_id = %s")
+        for news in newsList:
+            cursor.execute(
+                sql, (news.article_body, news.news_id))
+            db.commit()
+    except Exception as e:
+        print(e)
+
+
 # 将情感分析过后的comment进行更新
 def database_edits():
     try:
@@ -188,5 +216,29 @@ def database_edits():
                 sql0, (hotvalue['news_id'], hotvalue['created'],
                        hotvalue['comment_count'], hotvalue['like_count'], hotvalue['read_count']))
             db.commit()
+    except Exception as e:
+        print(e)
+
+
+# 去重留一方法
+def delete_unsatisfied():
+    try:
+        news = []
+        sql = ("DELETE tt_news "
+               "FROM tt_news, "
+               "(SELECT min(news_id) news_id, title "
+               "FROM tt_news "
+               "GROUP BY title "
+               "HAVING count(*) > 1) t2 "
+               "WHERE tt_news.title = t2.title AND tt_news.news_id > t2.news_id")
+        # sql = 'SELECT * FROM tt_news where char_length(article_body)<100'
+        cursor.execute(sql)
+        db.commit()
+        # nodes = cursor.fetchall()
+        # for i in range(len(nodes)):
+        #     news.append(str(nodes[i][0])+'\t'+nodes[i][1])
+        # with open('./news_id_list.txt', 'w+', encoding='utf8') as f:
+        #     f.write('\n'.join(news))
+
     except Exception as e:
         print(e)
