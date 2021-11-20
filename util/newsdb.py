@@ -32,45 +32,52 @@ def get_commentNum():
 
 # 插入新闻列表,同时插入热值
 def add_news(NewsList):
-    try:
-        # 插入sql语句
-        sql0 = ("INSERT INTO tt_news(news_id,created,behot_time,publish_time,title,"
-                "tag,abstract,article_url,source,keyword_str,cmt_count,like_count,read_count"
-                ")"
-                "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
-        for news in NewsList:
+    # 插入sql语句
+    sql0 = ("INSERT INTO tt_news(news_id,created,behot_time,publish_time,title,"
+            "tag,abstract,article_url,source,keyword_str,cmt_count,like_count,read_count"
+            ")"
+            "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+    # 得到当前评论最大id
+    newsNum = get_newsNum()
+    if(newsNum == None):
+        newsNum = 1
+    else:
+        newsNum += 1
+    for news in NewsList:
+        try:
             # 插入news表
             cursor.execute(
-                sql0, (news.news_id, news.created, news.behot_time, news.publish_time, news.title,
+                sql0, (newsNum, news.created, news.behot_time, news.publish_time, news.title,
                        news.tag, news.abstract, news.article_url, news.source, news.keywordStr,
                        news.comment_count, news.like_count, news.read_count
                        ))
             db.commit()
-            print(f'just added the news {news.news_id}')
-    except Exception as e:
-        print(e)
+            newsNum += 1
+            print(f'just added the news {newsNum}')
+        except Exception as e:
+            print(e)
 
 
 # 插入评论的方法
 def add_comments(commentList):
-    try:
-        # 插入列表sql语句
-        sql = ("INSERT INTO comment(comment_id,article_url,comment_str,comment_url,sentiment)"
-               "VALUES(%s,%s,%s,%s,%s)")
-        # 得到当前新闻个数
-        commentNum = get_commentNum()
-        if(commentNum == None):
-            commentNum = 1
-        else:
-            commentNum += 1
-        for comment in commentList:
+    # 插入列表sql语句
+    sql = ("INSERT INTO comment(comment_id,article_url,comment_str,comment_url,sentiment)"
+           "VALUES(%s,%s,%s,%s,%s)")
+    # 得到当前评论最大id
+    commentNum = get_commentNum()
+    if(commentNum == None):
+        commentNum = 1
+    else:
+        commentNum += 1
+    for comment in commentList:
+        try:
             cursor.execute(
                 sql, (commentNum, comment.article_url, comment.comment_str, comment.comment_url, comment.sentiment))
             db.commit()
             commentNum += 1
-            print(f'just added the comment {comment.news_id}')
-    except Exception as e:
-        print(e)
+            print(f'just added the comment {commentNum}')
+        except Exception as e:
+            print(e)
 
 
 # 获得所有分类
@@ -224,13 +231,13 @@ def database_edits():
 def delete_unsatisfied():
     try:
         news = []
-        sql = ("DELETE tt_news "
-               "FROM tt_news, "
-               "(SELECT min(news_id) news_id, title "
-               "FROM tt_news "
-               "GROUP BY title "
+        sql = ("DELETE comment "
+               "FROM comment, "
+               "(SELECT min(comment_id) comment_id, article_url "
+               "FROM comment "
+               "GROUP BY article_url "
                "HAVING count(*) > 1) t2 "
-               "WHERE tt_news.title = t2.title AND tt_news.news_id > t2.news_id")
+               "WHERE comment.article_url = t2.article_url AND comment.comment_id > t2.comment_id")
         # sql = 'SELECT * FROM tt_news where char_length(article_body)<100'
         cursor.execute(sql)
         db.commit()

@@ -5,7 +5,7 @@ from model.Comment import Comment
 # 需要使用的参数
 headers = {
     'cookie':
-    '__ac_nonce=06198fb5d0028f235645b; __ac_signature=_02B4Z6wo00f016fH6PAAAIDDJ8USseWiey-n5-xAAIhxd8; ttcid=1f91d8a58d7943f9bfdba13e533e34af36; csrftoken=0c80651dc788b91a0f1d33c8b4273ca2; MONITOR_WEB_ID=7032647174854051365; tt_scid=9kik67w.Tn17PlxIaK.XpcoKabB7sUBY.S8-c3UQMdD.Yai6NViXD8kdvac0u3ch3aa1; s_v_web_id=verify_ab0c212b68bbf3b2e75730bcf1015df3; MONITOR_DEVICE_ID=fd0f515d-6c88-4a28-a63b-ffe60b5fc94b; _tea_utm_cache_2018=undefined',
+    '__ac_nonce=0619904ac00774a934109; __ac_signature=_02B4Z6wo00f01fZ5f1QAAIDBdnuFF-l27KH2WXvAABwJJOITcIIQvCaWnuuyqVzCLSSdIV40tuS.xII6Su3CmWtdTdgquB6Q-MeQPzrPV0OxzgzX0VidOveTIEhbbLsvTEU69a0Jo1HTgKbmf8; csrftoken=ef3f0b25a019f5d84be837edeb46fb53; MONITOR_WEB_ID=7009637787465680415; s_v_web_id=verify_5af18547cbf141431b5b247abb20749c; _tea_utm_cache_2018=undefined; MONITOR_DEVICE_ID=b8774009-19de-48e5-b864-73b0c0841d35; tt_scid=n5K00FVbJZ.6M9HtiJJR5NPGJIo-6XwsnNExZxeQlv9H.tkUrXz1ADC-jIf26sS3b2c9',
     'user-agent':
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36'
 }
