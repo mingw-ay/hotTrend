@@ -1,6 +1,7 @@
 from model.News import News
 from scrape_comment import get_comment
 from util.newsdb import add_news, add_comments, get_newsNum
+from util.payload import COOKIE
 from scrape_comment import get_comment
 import requests
 import time
@@ -8,16 +9,15 @@ import execjs
 
 # 需要爬取的评到及id
 array_channel_id = [
-    '3189398996', '3189399007', '3189398999',  '3189398972', '3189398957',
+    '0', '3189398996', '3189399007', '3189398999',  '3189398972', '3189398957',
     '3189398984', '3189398981', '3189398995', '3189398960', '3189398968'
 ]
 array_channel_name = [
-    'hot', 'finance', 'tech', 'entertainment', 'sports', 'fashion',
+    'recommendation', 'hot', 'finance', 'tech', 'entertainment', 'sports', 'fashion',
     'digital', 'game', 'military', 'world'
 ]
 headers = {
-    'cookie':
-    '__ac_nonce=0619904ac00774a934109; __ac_signature=_02B4Z6wo00f01fZ5f1QAAIDBdnuFF-l27KH2WXvAABwJJOITcIIQvCaWnuuyqVzCLSSdIV40tuS.xII6Su3CmWtdTdgquB6Q-MeQPzrPV0OxzgzX0VidOveTIEhbbLsvTEU69a0Jo1HTgKbmf8; csrftoken=ef3f0b25a019f5d84be837edeb46fb53; MONITOR_WEB_ID=7009637787465680415; s_v_web_id=verify_5af18547cbf141431b5b247abb20749c; _tea_utm_cache_2018=undefined; MONITOR_DEVICE_ID=b8774009-19de-48e5-b864-73b0c0841d35; tt_scid=n5K00FVbJZ.6M9HtiJJR5NPGJIo-6XwsnNExZxeQlv9H.tkUrXz1ADC-jIf26sS3b2c9',
+    'cookie': COOKIE,
     'user-agent':
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36'
 }
@@ -44,11 +44,12 @@ def scrape_channel(channel_id, max_behot_time):
     global newsNum
     # 得到created
     created = max_behot_time
-    max_behot_time = 0
     # 循环10次爬取该频道
     for i in range(0, 10):
         # 爬取新闻列表的api
         feed_url = f'https://www.toutiao.com/api/pc/list/feed?channel_id={channel_id}&max_behot_time={max_behot_time}&category=pc_profile_channel'
+        if channel_id == '0':
+            feed_url = f'https://www.toutiao.com/api/pc/list/feed?channel_id={channel_id}&max_behot_time={max_behot_time}&category=pc_profile_recommend'
         # 运行acrawler.js得到返回值
         with open('acrawler.js', encoding='utf-8') as f:
             js_data = f.read()
@@ -85,9 +86,9 @@ def scrape_channel(channel_id, max_behot_time):
                         '不想看:', '') + ','
 
             # 排除所有视频
-            if 'video' in feed['tag'] or '视频' in keywordStr or '视频' in feed['source']:
+            if 'video' in feed['tag'] or '视频' in keywordStr:
                 continue
-            if 'media' in feed['tag']:
+            if 'news_media' in feed['tag']:
                 continue
 
             # 得到初始的news_id

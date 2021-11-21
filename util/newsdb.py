@@ -1,3 +1,4 @@
+from os import dup
 from util.database import db, cursor
 from model.News import News
 from model.Comment import Comment
@@ -32,6 +33,7 @@ def get_commentNum():
 
 # 插入新闻列表,同时插入热值
 def add_news(NewsList):
+    dup_count = 0
     # 插入sql语句
     sql0 = ("INSERT INTO tt_news(news_id,created,behot_time,publish_time,title,"
             "tag,abstract,article_url,source,keyword_str,cmt_count,like_count,read_count"
@@ -53,13 +55,15 @@ def add_news(NewsList):
                        ))
             db.commit()
             newsNum += 1
-            print(f'just added the news {newsNum}')
+            print(f'成功加入新闻{newsNum}号')
         except Exception as e:
-            print(e)
+            dup_count += 1
+    print(f'共{len(NewsList)}个新闻，其中{dup_count}个重复')
 
 
 # 插入评论的方法
 def add_comments(commentList):
+    dup_count = 0
     # 插入列表sql语句
     sql = ("INSERT INTO comment(comment_id,article_url,comment_str,comment_url,sentiment)"
            "VALUES(%s,%s,%s,%s,%s)")
@@ -75,9 +79,10 @@ def add_comments(commentList):
                 sql, (commentNum, comment.article_url, comment.comment_str, comment.comment_url, comment.sentiment))
             db.commit()
             commentNum += 1
-            print(f'just added the comment {commentNum}')
+            print(f'成功加入评论{commentNum}号')
         except Exception as e:
-            print(e)
+            dup_count += 1
+    print(f'共{len(commentList)}条评论，其中{dup_count}个重复')
 
 
 # 获得所有分类
