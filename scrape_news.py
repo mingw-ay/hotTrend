@@ -45,7 +45,7 @@ def scrape_channel(channel_id, max_behot_time):
     # 得到created
     created = max_behot_time
     # 循环10次爬取该频道
-    for i in range(0, 10):
+    for i in range(0, 5):
         # 爬取新闻列表的api
         feed_url = f'https://www.toutiao.com/api/pc/list/feed?channel_id={channel_id}&max_behot_time={max_behot_time}&category=pc_profile_channel'
         if channel_id == '0':
@@ -71,6 +71,7 @@ def scrape_channel(channel_id, max_behot_time):
         commentList = []
 
         # 循环得到的新闻
+        video_count = 0
         for feed in feeds:
             # 可能是新闻没有tag，故而排除没有tag的元素
             if feed.get('tag') == None:
@@ -87,8 +88,10 @@ def scrape_channel(channel_id, max_behot_time):
 
             # 排除所有视频
             if 'video' in feed['tag'] or '视频' in keywordStr:
+                video_count += 1
                 continue
             if 'news_media' in feed['tag']:
+                video_count += 1
                 continue
 
             # 得到初始的news_id
@@ -115,6 +118,8 @@ def scrape_channel(channel_id, max_behot_time):
                 # 将得到的comment对象接入列表
                 commentList.append(comment)
 
+        # 打印视频新闻个数
+        print(f'共返回{len(feeds)}条新闻，其中{video_count}个视频会被舍弃')
         # 加入数据库
         add_news(newsList)
         add_comments(commentList)
@@ -123,9 +128,11 @@ def scrape_channel(channel_id, max_behot_time):
         time.sleep(1)
 
 
-# 循环，爬取每一个频道
-for channel_id in array_channel_id:
-    # the news_array feeds
-    print('scrape from channel',
-          array_channel_name[array_channel_id.index(channel_id)])
-    scrape_channel(channel_id=channel_id, max_behot_time=initial_behot_time)
+# 循环，爬取每一个频道,并且循环两遍
+for i in range(0, 2):
+    for channel_id in array_channel_id:
+        # the news_array feeds
+        print('scrape from channel',
+              array_channel_name[array_channel_id.index(channel_id)])
+        scrape_channel(channel_id=channel_id,
+                       max_behot_time=initial_behot_time)

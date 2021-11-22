@@ -6,6 +6,7 @@ config = {
     'password': 'fork1313',
     'host': '121.43.37.118',
     'database': 'news_scrawler'
+    # 'buffered': True
 }
 
 db = mysql.connector.connect(**config)

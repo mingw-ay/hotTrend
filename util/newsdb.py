@@ -1,4 +1,4 @@
-from os import dup
+from os import close, dup
 from util.database import db, cursor
 from model.News import News
 from model.Comment import Comment
@@ -34,6 +34,7 @@ def get_commentNum():
 # 插入新闻列表,同时插入热值
 def add_news(NewsList):
     dup_count = 0
+    dup_kw = []
     # 插入sql语句
     sql0 = ("INSERT INTO tt_news(news_id,created,behot_time,publish_time,title,"
             "tag,abstract,article_url,source,keyword_str,cmt_count,like_count,read_count"
@@ -58,7 +59,9 @@ def add_news(NewsList):
             print(f'成功加入新闻{newsNum}号')
         except Exception as e:
             dup_count += 1
-    print(f'共{len(NewsList)}个新闻，其中{dup_count}个重复')
+            dup_kw.append(news.keywordStr)
+    dup_kw = '\n'.join(dup_kw)
+    print(f'又有{dup_count}个重复新闻，其关键词分别是:\n{dup_kw}')
 
 
 # 插入评论的方法
@@ -165,7 +168,7 @@ def get_comments_without():
         # 初始化列表
         commentList = []
         for i in range(len(nodes)):
-            comment = Comment(nodes[i][1], nodes[i][2], nodes[i][3])
+            comment = Comment(None, nodes[i][1], nodes[i][2], nodes[i][3])
             commentList.append(comment)
         return commentList
     except Exception as e:
@@ -252,5 +255,21 @@ def delete_unsatisfied():
         # with open('./news_id_list.txt', 'w+', encoding='utf8') as f:
         #     f.write('\n'.join(news))
 
+    except Exception as e:
+        print(e)
+
+
+def to_tt_hotvalue():
+    try:
+        sql = 'SELECT created,article_url,cmt_count,like_count,read_count FROM tt_news'
+        sql0 = ("INSERT INTO tt_hotvalue(created,article_url,cmt_count,like_count,read_count)"
+                "VALUES(%s,%s,%s,%s,%s)"
+                )
+        cursor.execute(sql)
+        nodes = cursor.fetchall()
+        print(type(nodes))
+        for node in nodes:
+            cursor.execute(sql0, (node[0], node[1], node[2], node[3], node[4]))
+            db.commit()
     except Exception as e:
         print(e)
