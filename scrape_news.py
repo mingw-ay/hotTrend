@@ -1,7 +1,7 @@
 from model.News import News
 from scrape_comment import get_comment
 from util.newsdb import add_news, add_comments, get_newsNum
-from util.payload import COOKIE
+from util.payload import headers
 from scrape_comment import get_comment
 import requests
 import time
@@ -16,11 +16,6 @@ array_channel_name = [
     'recommendation', 'hot', 'finance', 'tech', 'entertainment', 'sports', 'fashion',
     'digital', 'game', 'military', 'world'
 ]
-headers = {
-    'cookie': COOKIE,
-    'user-agent':
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36'
-}
 
 # 记录本次爬取新闻的序号以及爬取时间戳（10位）
 initial_behot_time = int(time.time())
@@ -44,6 +39,7 @@ def scrape_channel(channel_id, max_behot_time):
     global newsNum
     # 得到created
     created = max_behot_time
+    max_behot_time = int(time.time())
     # 循环10次爬取该频道
     for i in range(0, 5):
         # 爬取新闻列表的api
@@ -75,6 +71,7 @@ def scrape_channel(channel_id, max_behot_time):
         for feed in feeds:
             # 可能是新闻没有tag，故而排除没有tag的元素
             if feed.get('tag') == None:
+                video_count += 1
                 continue
 
             # 得到关键词字符串
@@ -125,7 +122,7 @@ def scrape_channel(channel_id, max_behot_time):
         add_comments(commentList)
 
         # 休息一会儿，防止被怀疑
-        time.sleep(1)
+        time.sleep(3)
 
 
 # 循环，爬取每一个频道,并且循环两遍

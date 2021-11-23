@@ -1,14 +1,8 @@
 import requests
 from model.Comment import Comment
-from util.payload import COOKIE
+from util.payload import headers
 
 # 本文件主要包括爬取某一页面的评论
-# 需要使用的参数
-headers = {
-    'cookie': COOKIE,
-    'user-agent':
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36'
-}
 
 
 # 传入,news_id,news_url,boolean值（代表是不是视频）以及视频评论个数
