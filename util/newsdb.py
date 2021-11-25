@@ -1,4 +1,3 @@
-from os import close, dup
 from util.database import db, cursor
 from model.News import News
 from model.Comment import Comment
@@ -26,6 +25,7 @@ def get_commentNum():
         sql = ('select max(comment_id) from comment')
         cursor.execute(sql)
         result = cursor.fetchall()
+        print(result)
         return result[0][0]
     except Exception as e:
         print(e)
