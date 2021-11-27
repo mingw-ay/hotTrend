@@ -25,15 +25,6 @@ class News:
         self.keywordsToList()
 
     def keywordsToList(self):
-        self.keywordList = self.keywordStr.split('  ')
-
-    def greeting(self):
-        print(
-            f'the title is: \n {self.title} \nthe abstract is \n {self.abstract}\n'
-            +
-            f'the article_url is \n {self.article_url} \nthe behot_time is \n {self.behot_time} \n'
-            +
-            f'the publish_time is: \n {self.publish_time} \nthe comment_count is \n {self.comment_count} \n'
-            +
-            f'the read_count is: \n {self.read_count} \nthe source is \n {self.source} \n'
-        )
+        self.keywordList = self.keywordStr.split(',')
+        self.keywordList = [x.strip()
+                            for x in self.keywordList if x.strip() != '']

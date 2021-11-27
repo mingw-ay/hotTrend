@@ -92,7 +92,7 @@ def add_comments(commentList):
 def get_categories():
     try:
         # the sql statement for insert
-        sql = "SELECT tag FROM news group by tag"
+        sql = "SELECT tag FROM tt_news group by tag"
         cursor.execute(sql)
         categories = cursor.fetchall()
         for i in range(len(categories)):
@@ -106,23 +106,42 @@ def get_categories():
 def get_news_byCaid(categoryId):
     try:
         # sql语句
-        sql = ("SELECT * FROM news,hotvalue WHERE tag = %s and news.news_id = hotvalue.news_id"
-               " and news.created = hotvalue.created")
+        sql = ("SELECT * FROM tt_news WHERE tag = %s order by news_id asc LIMIT 20")
         cursor.execute(sql, (categoryId,))
         nodes = cursor.fetchall()
         # 初始化列表
         newsList = []
         for i in range(len(nodes)-1):
-            news = News(nodes[i][0], nodes[i][1], nodes[i][4], nodes[i][5], nodes[i][6],
-                        nodes[i][7], nodes[i][2], nodes[i][3], nodes[i][13],
-                        nodes[i][14], nodes[i][15], nodes[i][9], nodes[i][8])
+            news = News(nodes[i][0], nodes[i][1], nodes[i][4], nodes[i][5], nodes[i][7],
+                        nodes[i][8], nodes[i][2], nodes[i][3], nodes[i][11],
+                        nodes[i][12], nodes[i][13], nodes[i][10], nodes[i][9])
             newsList.append(news)
         return newsList
     except Exception as e:
         print(e)
 
 
+# 获得某个时间戳的所有新闻
+def getNewsByCreatedTime(createdTime):
+    try:
+        # sql语句
+        sql = ("SELECT * FROM tt_news WHERE created = %s order by news_id asc LIMIT 20")
+        cursor.execute(sql, (createdTime,))
+        nodes = cursor.fetchall()
+        # 初始化列表
+        newsList = []
+        for i in range(len(nodes)-1):
+            news = News(nodes[i][0], nodes[i][1], nodes[i][4], nodes[i][5], nodes[i][7],
+                        nodes[i][8], nodes[i][2], nodes[i][3], nodes[i][11],
+                        nodes[i][12], nodes[i][13], nodes[i][10], nodes[i][9])
+            newsList.append(news)
+        return newsList
+    except Exception as e:
+        print(e)
+
 # 获得所有未进行分类的新闻
+
+
 def get_news():
     try:
         # sql语句
